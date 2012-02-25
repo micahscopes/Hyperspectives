@@ -23,7 +23,8 @@
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
 		<script type="x-shader/x-fragment" id="fragmentshader"></script>
 		
-		<script src="../js/three.js/build/Three.js"></script>
+		<script src="https://raw.github.com/mrdoob/three.js/master/build/Three.js"></script>
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="../js/three.js/examples/js/Stats.js"></script>
 		<script src="../js/jquery-1.4.3.min.js"></script>
 		<script>
@@ -55,12 +56,10 @@
 				document.body.appendChild( container );
 
 				var infoTop = document.createElement( 'div' );
-				infoTop.style.position = 'absolute';
-				infoTop.style.top = '10x';
-				infoTop.style.width = '95%';
+				infoTop.style.padding = "0 100px";
 				infoTop.style.textAlign = 'center';
 				
-				infoTop.innerHTML = '<h4>Dragging the mouse moves the camera. Pressing the left &amp; right arrow keys changes the rate of rotation.</h4>';
+				infoTop.innerHTML = '<h4>The horse is inverse stereographically projected onto the hypersphere, rotated, and projected back again.  <br/>Dragging the mouse moves the camera. Pressing the arrow keys controls the rate of rotation of the hypersphere.</h4>';
 				
 				var refs = document.createElement( 'div' );
 				refs.style.position = 'absolute';
@@ -73,9 +72,9 @@
 								'<p/>References: <a href="http://spacesymmetrystructure.wordpress.com/category/Inversion/" alt="Quite a coincidence that he also used a horse...">Daniel Piker\'s blog posts</a>, '+
 								'<a href="http://www.youtube.com/watch?v=JX3VmDgiFnY" alt="youtube.com">Moebius Transformations Revealed</a>, '+
 								'Wikipedia: <a href="http://wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a>, <a href="http://wikipedia.org/wiki/Mobius_group">Möbius transformation</a>, <a href="http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition">Isoclinic decomposition.</a>' +
-								'<p/>Credits: Built in <a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a>.' +
+								'<p/>Credits: Built in <a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a>. ' +
 								'Horse model by <a href="http://mirada.com/">mirada</a> (as seen in <a href="http://ro.me">rome</a>). Hypertext,' +
-								' composition, rotation & GLSL shaders by <a href="http://soundcloud.com/micahphones">micahphones</a>. ';
+								' composition & shaders by <a href="http://soundcloud.com/micahphones">micahphones</a>. ' +'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>';
 
 				container.appendChild( infoTop );
 				container.appendChild( refs );

@@ -44,6 +44,5 @@ for each primary color!
 
 More Information
 ----------------
-There is an extremely good video series online called (Dimensions 
-Math)[http://www.dimensions-math.org/].  You should really watch all 
-of them!
+There is an extremely good, free video series online called [http://www.dimensions-math.org/](Dimensions 
+Math).  You should probably watch all of them.

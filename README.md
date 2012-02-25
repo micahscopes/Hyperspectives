@@ -8,23 +8,42 @@ process.
 
 (Hyper Horse)[http://hyperspectives.timbremill.net/moebius/hyperhorse.html]
 ---------------------------------------------------------------------------
+### What's going on here?
 The horse is inverse stereographically projected onto the hypersphere, 
 rotated, and projected back again. Dragging the mouse moves the 
 camera. Pressing the left & right arrow keys decrements and 
 increments the rotation speed.
 
-References: [Daniel Piker’s blog posts][], [Moebius Transformations
-Revealed][], Wikipedia: [Stereographic projection][], [Möbius
-transformation][], [Isoclinic decomposition.][]
+### How does it work?
+[Daniel Piker’s blog posts][1] give a great overview of this stuff.  
+Another big help is [Moebius Transformations
+Revealed][2], which shows the 2 dimensional Moebius transformations.  
+It really gives an idea of what's going on in a more familiar space.  
+And of course Wikipedia articles: [Stereographic projection][3], [Möbius
+transformation][4], [Isoclinic decomposition.][5]
 
-  [Daniel Piker’s blog posts]: http://spacesymmetrystructure.wordpress.com/category/Inversion/
-  [Moebius Transformations Revealed]: http://www.youtube.com/watch?v=JX3VmDgiFnY
-  [Stereographic projection]: http://wikipedia.org/wiki/Stereographic_projection
-  [Möbius transformation]: http://wikipedia.org/wiki/Mobius_group
-  [Isoclinic decomposition.]: http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition
+  [1]: http://spacesymmetrystructure.wordpress.com/category/Inversion/
+  [2]: http://www.youtube.com/watch?v=JX3VmDgiFnY
+  [3]: http://wikipedia.org/wiki/Stereographic_projection
+  [4]: http://wikipedia.org/wiki/Mobius_group
+  [5]: http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition
   
-(Vertex Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
--------------------------------------------------------------------------------
+### (Vertex Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
+This GLSL code does the actual geometry work of the stereographic 
+projection and 4 dimensional rotation.  You can see that it takes two 
+four-dimensional vectors as input.  Those are the parameters for the 
+[isoclinic rotation matrices][4], which should each have determinants 
+of 1 since they are rotations.  So you have to be careful what you put 
+in them!
 
-(Fragment Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
--------------------------------------------------------------------------------
+### (Fragment Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
+This does the coloring.  It is very simple.  It takes the normal 
+vector and does a dot product with each eigenvalue.  Since we are 
+shading in 3 dimensional space, there is conveniently one eigen-value 
+for each primary color!
+
+More Information
+----------------
+There is an extremely good video series online called (Dimensions 
+Math)[http://www.dimensions-math.org/].  You should really watch all 
+of them!

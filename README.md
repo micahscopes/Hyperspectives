@@ -6,7 +6,7 @@ to offer unique perspectives on various aspects of what it means to be
 a creature living in living in space and to learn about math in the
 process.
 
-(Hyper Horse)[http://hyperspectives.timbremill.net/moebius/hyperhorse.html]
+[http://hyperspectives.timbremill.net/moebius/hyperhorse.html](Hyper Horse)
 ---------------------------------------------------------------------------
 ### What's going on here?
 The horse is inverse stereographically projected onto the hypersphere, 
@@ -28,7 +28,7 @@ transformation][4], [Isoclinic decomposition.][5]
   [4]: http://wikipedia.org/wiki/Mobius_group
   [5]: http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition
   
-### (Vertex Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
+### [http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl](Vertex Shader)
 This GLSL code does the actual geometry work of the stereographic 
 projection and 4 dimensional rotation.  You can see that it takes two 
 four-dimensional vectors as input.  Those are the parameters for the 
@@ -36,7 +36,7 @@ four-dimensional vectors as input.  Those are the parameters for the
 of 1 since they are rotations.  So you have to be careful what you put 
 in them!
 
-### (Fragment Shader)[http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl]
+### [http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl](Fragment Shader)
 This does the coloring.  It is very simple.  It takes the normal 
 vector and does a dot product with each eigenvalue.  Since we are 
 shading in 3 dimensional space, there is conveniently one eigen-value 

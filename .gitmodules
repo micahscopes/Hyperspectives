@@ -1,0 +1,3 @@
+[submodule "js/three.js"]
+	path = js/three.js
+	url = git@github.com:timbresmith/three.js.git

@@ -6,7 +6,7 @@ to offer unique perspectives on various aspects of what it means to be
 a creature living in living in space and to learn about math in the
 process.
 
-[http://hyperspectives.timbremill.net/moebius/hyperhorse.html](Hyper Horse)
+[Hyper Horse](http://hyperspectives.timbremill.net/moebius/hyperhorse.html)
 ---------------------------------------------------------------------------
 ### What's going on here?
 The horse is inverse stereographically projected onto the hypersphere, 
@@ -28,7 +28,7 @@ transformation][4], [Isoclinic decomposition.][5]
   [4]: http://wikipedia.org/wiki/Mobius_group
   [5]: http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition
   
-### [http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl](Vertex Shader)
+### [Vertex Shader](http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl)
 This GLSL code does the actual geometry work of the stereographic 
 projection and 4 dimensional rotation.  You can see that it takes two 
 four-dimensional vectors as input.  Those are the parameters for the 
@@ -36,7 +36,7 @@ four-dimensional vectors as input.  Those are the parameters for the
 of 1 since they are rotations.  So you have to be careful what you put 
 in them!
 
-### [http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl](Fragment Shader)
+### [Fragment Shader](http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl)
 This does the coloring.  It is very simple.  It takes the normal 
 vector and does a dot product with each eigenvalue.  Since we are 
 shading in 3 dimensional space, there is conveniently one eigen-value 
@@ -44,5 +44,5 @@ for each primary color!
 
 More Information
 ----------------
-There is an extremely good, free video series online called [http://www.dimensions-math.org/](Dimensions 
-Math).  You should probably watch all of them.
+There's a super good, free video series online called [Dimensions 
+Math](http://www.dimensions-math.org/), check it out.

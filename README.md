@@ -40,7 +40,9 @@ in them!
 This does the coloring.  It is very simple.  It takes the normal 
 vector and does a dot product with each eigenvector.  Since we are 
 shading in 3 dimensional space, there is conveniently one eigenvector 
-for each primary color!
+for each primary color!  In other words, each component RGB value for
+a particular vertex is the dot product of the normal at that vertex with
+one of the eigenvectors of 3D space.
 
 More Information
 ----------------

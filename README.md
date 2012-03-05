@@ -38,8 +38,8 @@ in them!
 
 ### [Fragment Shader](http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl)
 This does the coloring.  It is very simple.  It takes the normal 
-vector and does a dot product with each eigenvalue.  Since we are 
-shading in 3 dimensional space, there is conveniently one eigen-value 
+vector and does a dot product with each eigenvector.  Since we are 
+shading in 3 dimensional space, there is conveniently one eigenvector 
 for each primary color!
 
 More Information

@@ -40,10 +40,10 @@ in them!
 This does the coloring.  It is very simple.  It takes the normal 
 vector and does a dot product with each eigenvector.  Since we are 
 shading in 3 dimensional space, there is conveniently one eigenvector 
-for each primary color!  In other words, each component RGB value for
-a particular vertex is the dot product of the normal at that vertex with
-one of the eigenvectors of 3D space.  This makes it look like there's 
-a red light, a blue light and a green light all shining onto the origin
+for each primary color!  In other words, each component red, green or blue
+value for a particular vertex is the dot product of the normal at that 
+vertex with one of the eigenvectors of 3D space.  This makes it look like
+there's a red light, a blue light and a green light all shining onto the origin
 at right angles from one another.
 
 More Information

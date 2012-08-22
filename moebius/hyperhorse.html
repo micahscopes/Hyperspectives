@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
 			body {
-				font-family: mono;
+				font-family: "Andale Mono", mono, sans;
 				font-size: 0.7em;
 				background-color: #111;
 				color: white;
@@ -38,6 +38,19 @@
 				color: #aaa;
 			}
 		</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29487746-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 	</head>
 	<body>		
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
@@ -95,6 +108,7 @@
 
 			var radius= 1000;
 			var rotationSpeed = 1;
+			var pauseSpeed = 1;
 			
 			var targetYRotation = targetXRotation = 0;
 			var targetYRotationOnMouseDown = targetXRotationOnMouseDown = 0;
@@ -107,7 +121,10 @@
 
 
 			init();
-			animate();
+			setInterval( function () {
+			    requestAnimationFrame( animate );
+			}, 1000 / 40 );
+
 
 			function init() {
 
@@ -118,7 +135,7 @@
 				infoTop.style.padding = "0 100px";
 				infoTop.style.textAlign = 'center';
 				
-				infoTop.innerHTML = '<h4>The horse is inverse stereographically projected onto the hypersphere, rotated, and projected back again.  <br/>Dragging the mouse moves the camera. The left & right arrow keys decrement and increment rotation speed.</h4>';
+				infoTop.innerHTML = '<h4>The horse is inverse stereographically projected onto the hypersphere, rotated, and projected back again.  <br/>Dragging the mouse moves the camera. The left & right arrow keys decrement and increment rotation speed. Spacebar to pause.</h4>';
 				
 				var refs = document.createElement( 'div' );
 				refs.style.position = 'absolute';
@@ -267,31 +284,36 @@
 							break;
 						case 39:
 							rotationSpeed += 0.5;
-							break;							
+							break;
+						case 32:
+							if (rotationSpeed == 0) {
+								rotationSpeed = pauseSpeed;
+							} else {
+								pauseSpeed = rotationSpeed;
+								rotationSpeed = 0;
+							}
+							break;
 						}							
 						
 				}
 			}
 
 			function animate() {
-
-				requestAnimationFrame( animate );
-
 				render();
 				stats.update();
 
 			}
 
 			var theta = 0;
-
+			var ms = Date.now();
 			var duration = 1000;
 			var keyframes = 15, interpolation = duration / keyframes;
 			var lastKeyframe = 0, currentKeyframe = 0;
 
 			function render() {
-
-				theta += rotationSpeed;
-				var th = theta*Math.PI/180
+				theta += rotationSpeed*(Date.now()-ms)/800;
+				ms = Date.now();
+				var th = theta;
 				uniforms.leftIsoclinic.value = [	0,0,Math.cos(th),	-Math.sin(th)	];
 				uniforms.rightIsoclinic.value = [	0,0,Math.cos(th),	-Math.sin(th)	];
 				

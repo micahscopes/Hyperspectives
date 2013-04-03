@@ -1,0 +1,384 @@
+Index: release/scripts/startup/bl_ui/properties_data_modifier.py
+===================================================================
+--- release/scripts/startup/bl_ui/properties_data_modifier.py	(revision 55743)
++++ release/scripts/startup/bl_ui/properties_data_modifier.py	(working copy)
+@@ -726,7 +726,13 @@
+ 
+     def SMOKE(self, layout, ob, md):
+         layout.label(text="Settings can be found inside the Physics context")
++    def MOEBIUS(self, layout, ob, md):
++        split = layout.split()
+ 
++        col = split.column()
++        col.label(text="Object:")
++        col.prop(md, "control", text="")
++        
+     def SMOOTH(self, layout, ob, md):
+         split = layout.split(percentage=0.25)
+ 
+Index: source/blender/makesrna/intern/rna_modifier.c
+===================================================================
+--- source/blender/makesrna/intern/rna_modifier.c	(revision 55743)
++++ source/blender/makesrna/intern/rna_modifier.c	(working copy)
+@@ -107,6 +107,7 @@
+ 	{eModifierType_Smoke, "SMOKE", ICON_MOD_SMOKE, "Smoke", ""},
+ 	{eModifierType_Softbody, "SOFT_BODY", ICON_MOD_SOFT, "Soft Body", ""},
+ 	{eModifierType_Surface, "SURFACE", ICON_MOD_PHYSICS, "Surface", ""},
++	{eModifierType_Moebius, "MOEBIUS", ICON_MOD_PHYSICS, "Moebius", ""},
+ 	{0, NULL, 0, NULL, NULL}
+ };
+ 
+@@ -188,6 +189,8 @@
+ 			return &RNA_MaskModifier;
+ 		case eModifierType_SimpleDeform:
+ 			return &RNA_SimpleDeformModifier;
++		case eModifierType_Moebius:
++			return &RNA_MoebiusModifier;
+ 		case eModifierType_Multires:
+ 			return &RNA_MultiresModifier;
+ 		case eModifierType_Surface:
+@@ -604,6 +607,7 @@
+ 	modifier_object_set(ptr->id.data, &((MeshDeformModifierData *)ptr->data)->object, OB_MESH, value);
+ }
+ 
++
+ static void rna_ArrayModifier_end_cap_set(PointerRNA *ptr, PointerRNA value)
+ {
+ 	modifier_object_set(ptr->id.data, &((ArrayModifierData *)ptr->data)->end_cap, OB_MESH, value);
+@@ -2237,6 +2241,22 @@
+ 	RNA_def_property_update(prop, 0, "rna_Smoke_set_type");
+ }
+ 
++static void rna_def_modifier_moebius(BlenderRNA *brna)
++{
++	StructRNA *srna;
++	PropertyRNA *prop;
++	 
++	srna= RNA_def_struct(brna, "MoebiusModifier", "Modifier");
++	RNA_def_struct_ui_text(srna, "Moebius Modifier", "Moebius transformation");
++	RNA_def_struct_sdna(srna, "MoebiusModifierData");
++	RNA_def_struct_ui_icon(srna, ICON_MOD_PHYSICS);
++	
++	prop = RNA_def_property(srna, "control", PROP_POINTER, PROP_NONE);
++	RNA_def_property_ui_text(prop, "Control Object", "Object that defines rotation.");
++	RNA_def_property_flag(prop, PROP_EDITABLE | PROP_ID_SELF_CHECK);
++	RNA_def_property_update(prop, 0, "rna_Modifier_dependency_update");
++}
++
+ static void rna_def_modifier_dynamic_paint(BlenderRNA *brna)
+ {
+ 	StructRNA *srna;
+@@ -2315,6 +2335,8 @@
+ 	RNA_def_property_ui_text(prop, "Width", "Bevel value/amount");
+ 	RNA_def_property_update(prop, 0, "rna_Modifier_update");
+ 
++
++	
+ 	prop = RNA_def_property(srna, "segments", PROP_INT, PROP_NONE);
+ 	RNA_def_property_int_sdna(prop, NULL, "res");
+ 	RNA_def_property_range(prop, 1, 100);
+@@ -3712,6 +3734,7 @@
+ 	/* types */
+ 	rna_def_modifier_subsurf(brna);
+ 	rna_def_modifier_lattice(brna);
++	rna_def_modifier_moebius(brna);
+ 	rna_def_modifier_curve(brna);
+ 	rna_def_modifier_build(brna);
+ 	rna_def_modifier_mirror(brna);
+Index: source/blender/modifiers/MOD_modifiertypes.h
+===================================================================
+--- source/blender/modifiers/MOD_modifiertypes.h	(revision 55743)
++++ source/blender/modifiers/MOD_modifiertypes.h	(working copy)
+@@ -50,6 +50,7 @@
+ extern ModifierTypeInfo modifierType_Smooth;
+ extern ModifierTypeInfo modifierType_Cast;
+ extern ModifierTypeInfo modifierType_MeshDeform;
++extern ModifierTypeInfo modifierType_Moebius;
+ extern ModifierTypeInfo modifierType_ParticleSystem;
+ extern ModifierTypeInfo modifierType_ParticleInstance;
+ extern ModifierTypeInfo modifierType_Explode;
+Index: source/blender/modifiers/CMakeLists.txt
+===================================================================
+--- source/blender/modifiers/CMakeLists.txt	(revision 55743)
++++ source/blender/modifiers/CMakeLists.txt	(working copy)
+@@ -72,6 +72,7 @@
+ 	intern/MOD_meshcache_util.c
+ 	intern/MOD_meshdeform.c
+ 	intern/MOD_mirror.c
++	intern/MOD_moebius.c
+ 	intern/MOD_multires.c
+ 	intern/MOD_none.c
+ 	intern/MOD_ocean.c
+Index: source/blender/modifiers/intern/MOD_moebius.c
+===================================================================
+--- source/blender/modifiers/intern/MOD_moebius.c	(revision 0)
++++ source/blender/modifiers/intern/MOD_moebius.c	(revision 0)
+@@ -0,0 +1,232 @@
++/*
++ * ***** BEGIN GPL LICENSE BLOCK *****
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software Foundation,
++ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ * The Original Code is Copyright (C) 2005 Blender Foundation.
++ * All rights reserved.
++ *
++ * The Original Code is: all of this file.
++ *
++ * Contributor(s): Daniel Dunbar
++ *                 Ton Roosendaal,
++ *                 Ben Batt,
++ *                 Brecht Van Lommel,
++ *                 Campbell Barton,
++ * 				   Micah Fitch :)
++ * 
++ *
++ * ***** END GPL LICENSE BLOCK *****
++ */
++
++/** \file blender/modifiers/intern/MOD_none.c
++ *  \ingroup modifiers
++ */
++
++#include <stdio.h>
++
++#include "DNA_object_types.h"
++
++#include "BLI_utildefines.h"
++#include "BLI_math.h"
++
++#include "BKE_modifier.h"
++#include "BKE_cdderivedmesh.h"
++
++#include "MOD_modifiertypes.h"
++#include "MOD_util.h"
++
++
++#include "depsgraph_private.h"
++
++
++static void calc_moebius_transform(Object *control, Object *target, float co[3]) {
++	float mat[4][4];	
++	float off[3];
++	float radius;
++	float leftQ[4]; 
++	float rightQ[4];
++	float hRot[4][4];
++	float leftMat[4][4];
++	float rightMat[4][4];
++	float dist;
++	float h[4];
++	radius = 1.0f;
++	
++	sub_v3_v3v3(off,target->obmat[3],control->obmat[3]); //should be control.pos - target.pos
++	mat4_to_quat(leftQ,control->obmat);
++	mat4_to_quat(rightQ,control->obmat);
++	
++	leftMat[0][0] = leftMat[1][1] = leftMat[2][2] = leftMat[3][3] = leftQ[0];
++	leftMat[0][1] = leftMat[2][3] = -leftQ[1];
++	leftMat[0][2] = leftMat[3][1] = -leftQ[2];
++	leftMat[0][3] = leftMat[1][2] = -leftQ[3];
++	leftMat[2][1] = leftMat[3][0] = leftQ[3];
++	leftMat[1][3] = leftMat[2][0] = leftQ[2];
++	leftMat[1][0] = leftMat[3][2] = leftQ[1];
++	
++	rightMat[0][0] = rightMat[1][1] = leftMat[2][2] = leftMat[3][3] = rightQ[0];
++	rightMat[0][1] = rightMat[3][2] = -rightQ[1];
++	rightMat[0][2] = rightMat[1][3] = -rightQ[2];
++	rightMat[0][3] = rightMat[2][1] = -rightQ[3];
++	rightMat[1][2] = rightMat[3][0] = rightQ[3];
++	rightMat[3][1] = rightMat[2][0] = rightQ[2];
++	rightMat[1][0] = rightMat[2][3] = rightQ[1];
++	
++	/* quick notes from GLSL implementation
++	 * mat4(a,-b,-c,-d///b,a,-d,c;;;c,d,a,-b///d,-c,b,a)
++	 * mat4(aa,-bb,-cc,-dd///bb,aa,dd,-cc///cc,-dd,aa,bb///dd,cc,-bb,aa);*/
++        
++	mult_m4_m4m4(hRot,rightMat,leftMat);
++	add_v3_v3(co,off);
++	mul_v3_fl(co,1.0f/radius);
++	dist= co[0]*co[0]+co[1]*co[1]+co[2]*co[2];
++	h[0] = 2*co[0];
++	h[1] = 2*co[1];
++	h[2] = 2*co[2];
++	h[3] = dist-1.0f;
++	
++	mul_v4_fl(h,1.0f/(1.0f+dist));
++	mul_m4_v4(hRot,h);
++	co[0] = h[0];
++	co[1] = h[1];
++	co[2] = h[2];
++	mul_v3_fl(co,radius/(1.0f-h[3]));
++	sub_v3_v3(co,off);	
++}
++
++static void moebius_transform_verts(Object *control, Object *target, DerivedMesh *dm,
++                          float (*vertexCos)[3], int numVerts)
++{
++	int a;
++	for (a = 0; a < numVerts; a++) {
++		calc_moebius_transform(control, target, vertexCos[a]);
++	}
++}
++
++
++static CustomDataMask requiredDataMask(Object *UNUSED(ob), ModifierData *md)
++{
++	MoebiusModifierData *smd = (MoebiusModifierData *)md;
++	CustomDataMask dataMask = 0;
++
++	/* ask for vertexgroups if we need them 
++	if (smd->vgroup_name[0])
++		dataMask |= CD_MASK_MDEFORMVERT;*/
++
++	return dataMask;
++}
++
++static void deformVerts(ModifierData *md, Object *ob,
++                        DerivedMesh *derivedData,
++                        float (*vertexCos)[3],
++                        int numVerts,
++                        ModifierApplyFlag UNUSED(flag))
++{
++	MoebiusModifierData *mmd = (MoebiusModifierData *) md;
++	DerivedMesh *dm = derivedData;
++	CustomDataMask dataMask = requiredDataMask(ob, md);
++
++	/* we implement requiredDataMask but thats not really useful since
++	 * mesh_calc_modifiers pass a NULL derivedData */
++	if (dataMask)
++		dm = get_dm(ob, NULL, dm, NULL, 0);
++		
++	moebius_transform_verts(mmd->control, ob, derivedData, vertexCos, numVerts/*, mmd->group*/);
++	
++	if (dm != derivedData)
++		dm->release(dm);
++}
++
++static void deformVertsEM(
++        ModifierData *md, Object *ob, struct BMEditMesh *em,
++        DerivedMesh *derivedData, float (*vertexCos)[3], int numVerts)
++{
++	DerivedMesh *dm = derivedData;
++
++	if (!derivedData) dm = CDDM_from_editbmesh(em, FALSE, FALSE);
++
++	deformVerts(md, ob, dm, vertexCos, numVerts, 0);
++
++	if (!derivedData) dm->release(dm);
++}
++
++
++/* Moebius Transform */
++static void initData(ModifierData *md)
++{
++	MoebiusModifierData *smd = (MoebiusModifierData *) md;
++}
++
++static void copyData(ModifierData *md, ModifierData *target)
++{
++	MoebiusModifierData *smd  = (MoebiusModifierData *)md;
++	MoebiusModifierData *tsmd = (MoebiusModifierData *)target;
++
++	tsmd->control  = smd->control;
++}
++
++static void foreachObjectLink(ModifierData *md, Object *ob,
++                              void (*walk)(void *userData, Object *ob, Object **obpoin), void *userData)
++{
++	MoebiusModifierData *mmd  = (MoebiusModifierData *)md;
++	walk(userData, ob, &mmd->control);
++}
++
++static int isDisabled(ModifierData *md, int UNUSED(userRenderParams))
++{
++	MoebiusModifierData *mmd = (MoebiusModifierData *) md;
++
++	return !mmd->control;
++}
++
++static void updateDepgraph(ModifierData *md, DagForest *forest,
++                           struct Scene *UNUSED(scene),
++                           Object *UNUSED(ob),
++                           DagNode *obNode)
++{
++	MoebiusModifierData *smd  = (MoebiusModifierData *)md;
++
++	if (smd->control)
++		dag_add_relation(forest, dag_get_node(forest, smd->control), obNode, DAG_RL_OB_DATA, "Moebius Transformation Modifier");
++}
++
++ModifierTypeInfo modifierType_Moebius = {
++	/* name */              "Moebius",
++	/* structName */        "MoebiusModifierData",
++	/* structSize */        sizeof(MoebiusModifierData),
++	/* type */              eModifierTypeType_OnlyDeform,
++	/* flags */             eModifierTypeFlag_AcceptsMesh |
++	                        eModifierTypeFlag_AcceptsCVs |
++							eModifierTypeFlag_SupportsEditmode,
++
++	/* copyData */          copyData,
++	/* deformVerts */       deformVerts,
++	/* deformMatrices */    NULL,
++	/* deformVertsEM */     deformVertsEM,
++	/* deformMatricesEM */  NULL,
++	/* applyModifier */     NULL,
++	/* applyModifierEM */   NULL,
++	/* initData */          initData,
++	/* requiredDataMask */  requiredDataMask,
++	/* freeData */          NULL,
++	/* isDisabled */        isDisabled,
++	/* updateDepgraph */    updateDepgraph,
++	/* dependsOnTime */     NULL,
++	/* dependsOnNormals */	NULL,
++	/* foreachObjectLink */ foreachObjectLink,
++	/* foreachIDLink */     NULL,
++	/* foreachTexLink */    NULL,
++};
+Index: source/blender/modifiers/intern/MOD_util.c
+===================================================================
+--- source/blender/modifiers/intern/MOD_util.c	(revision 55743)
++++ source/blender/modifiers/intern/MOD_util.c	(working copy)
+@@ -256,6 +256,7 @@
+ 	INIT_TYPE(Collision);
+ 	INIT_TYPE(Boolean);
+ 	INIT_TYPE(MeshDeform);
++	INIT_TYPE(Moebius);
+ 	INIT_TYPE(Ocean);
+ 	INIT_TYPE(ParticleSystem);
+ 	INIT_TYPE(ParticleInstance);
+Index: source/blender/makesdna/DNA_modifier_types.h
+===================================================================
+--- source/blender/makesdna/DNA_modifier_types.h	(revision 55743)
++++ source/blender/makesdna/DNA_modifier_types.h	(working copy)
+@@ -79,6 +79,7 @@
+ 	eModifierType_Triangulate       = 44,
+ 	eModifierType_UVWarp            = 45,
+ 	eModifierType_MeshCache         = 46,
++	eModifierType_Moebius           = 47,
+ 	NUM_MODIFIER_TYPES
+ } ModifierType;
+ 
+@@ -779,6 +780,11 @@
+ // #define MOD_SCREW_OBJECT_ANGLE	(1 << 4)
+ #define MOD_SCREW_SMOOTH_SHADING (1 << 5)
+ 
++typedef struct MoebiusModifierData {
++	ModifierData modifier;
++	struct Object *control;
++} MoebiusModifierData;
++
+ typedef struct OceanModifierData {
+ 	ModifierData modifier;
+ 	

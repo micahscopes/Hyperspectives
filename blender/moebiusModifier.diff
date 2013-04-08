@@ -193,7 +193,7 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	leftMat[1][3] = leftMat[2][0] = leftQ[2];
 +	leftMat[1][0] = leftMat[3][2] = leftQ[1];
 +	
-+	rightMat[0][0] = rightMat[1][1] = leftMat[2][2] = leftMat[3][3] = rightQ[0];
++	rightMat[0][0] = rightMat[1][1] = rightMat[2][2] = rightMat[3][3] = rightQ[0];
 +	rightMat[0][1] = rightMat[3][2] = -rightQ[1];
 +	rightMat[0][2] = rightMat[1][3] = -rightQ[2];
 +	rightMat[0][3] = rightMat[2][1] = -rightQ[3];
@@ -212,7 +212,7 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	h[0] = 2*co[0];
 +	h[1] = 2*co[1];
 +	h[2] = 2*co[2];
-+	h[3] = dist-1.0f;
++	h[3] = sqrtf(dist)-1.0f;
 +	
 +	mul_v4_fl(h,1.0f/(1.0f+dist));
 +	mul_m4_v4(hRot,h);

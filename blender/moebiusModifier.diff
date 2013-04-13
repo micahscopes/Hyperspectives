@@ -1,8 +1,8 @@
-Index: release/scripts/startup/bl_ui/properties_data_modifier.py
-===================================================================
---- release/scripts/startup/bl_ui/properties_data_modifier.py	(revision 55743)
-+++ release/scripts/startup/bl_ui/properties_data_modifier.py	(working copy)
-@@ -726,7 +726,13 @@
+diff --git release/scripts/startup/bl_ui/properties_data_modifier.py release/scripts/startup/bl_ui/properties_data_modifier.py
+index 71178e6..096e5a0 100644
+--- release/scripts/startup/bl_ui/properties_data_modifier.py
++++ release/scripts/startup/bl_ui/properties_data_modifier.py
+@@ -726,7 +726,13 @@ class DATA_PT_modifiers(ModifierButtonsPanel, Panel):
  
      def SMOKE(self, layout, ob, md):
          layout.label(text="Settings can be found inside the Physics context")
@@ -16,11 +16,35 @@ Index: release/scripts/startup/bl_ui/properties_data_modifier.py
      def SMOOTH(self, layout, ob, md):
          split = layout.split(percentage=0.25)
  
-Index: source/blender/makesrna/intern/rna_modifier.c
-===================================================================
---- source/blender/makesrna/intern/rna_modifier.c	(revision 55743)
-+++ source/blender/makesrna/intern/rna_modifier.c	(working copy)
-@@ -107,6 +107,7 @@
+diff --git source/blender/makesdna/DNA_modifier_types.h source/blender/makesdna/DNA_modifier_types.h
+index 66685c1..6d60cd9 100644
+--- source/blender/makesdna/DNA_modifier_types.h
++++ source/blender/makesdna/DNA_modifier_types.h
+@@ -79,6 +79,7 @@ typedef enum ModifierType {
+ 	eModifierType_Triangulate       = 44,
+ 	eModifierType_UVWarp            = 45,
+ 	eModifierType_MeshCache         = 46,
++	eModifierType_Moebius           = 47,
+ 	NUM_MODIFIER_TYPES
+ } ModifierType;
+ 
+@@ -779,6 +780,11 @@ typedef struct ScrewModifierData {
+ // #define MOD_SCREW_OBJECT_ANGLE	(1 << 4)
+ #define MOD_SCREW_SMOOTH_SHADING (1 << 5)
+ 
++typedef struct MoebiusModifierData {
++	ModifierData modifier;
++	struct Object *control;
++} MoebiusModifierData;
++
+ typedef struct OceanModifierData {
+ 	ModifierData modifier;
+ 	
+diff --git source/blender/makesrna/intern/rna_modifier.c source/blender/makesrna/intern/rna_modifier.c
+index b94d7e4..d3f025b 100644
+--- source/blender/makesrna/intern/rna_modifier.c
++++ source/blender/makesrna/intern/rna_modifier.c
+@@ -107,6 +107,7 @@ EnumPropertyItem modifier_type_items[] = {
  	{eModifierType_Smoke, "SMOKE", ICON_MOD_SMOKE, "Smoke", ""},
  	{eModifierType_Softbody, "SOFT_BODY", ICON_MOD_SOFT, "Soft Body", ""},
  	{eModifierType_Surface, "SURFACE", ICON_MOD_PHYSICS, "Surface", ""},
@@ -28,7 +52,7 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  	{0, NULL, 0, NULL, NULL}
  };
  
-@@ -188,6 +189,8 @@
+@@ -188,6 +189,8 @@ static StructRNA *rna_Modifier_refine(struct PointerRNA *ptr)
  			return &RNA_MaskModifier;
  		case eModifierType_SimpleDeform:
  			return &RNA_SimpleDeformModifier;
@@ -37,7 +61,7 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  		case eModifierType_Multires:
  			return &RNA_MultiresModifier;
  		case eModifierType_Surface:
-@@ -604,6 +607,7 @@
+@@ -604,6 +607,7 @@ static void rna_MeshDeformModifier_object_set(PointerRNA *ptr, PointerRNA value)
  	modifier_object_set(ptr->id.data, &((MeshDeformModifierData *)ptr->data)->object, OB_MESH, value);
  }
  
@@ -45,7 +69,7 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  static void rna_ArrayModifier_end_cap_set(PointerRNA *ptr, PointerRNA value)
  {
  	modifier_object_set(ptr->id.data, &((ArrayModifierData *)ptr->data)->end_cap, OB_MESH, value);
-@@ -2237,6 +2241,22 @@
+@@ -2237,6 +2241,22 @@ static void rna_def_modifier_smoke(BlenderRNA *brna)
  	RNA_def_property_update(prop, 0, "rna_Smoke_set_type");
  }
  
@@ -68,7 +92,7 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  static void rna_def_modifier_dynamic_paint(BlenderRNA *brna)
  {
  	StructRNA *srna;
-@@ -2315,6 +2335,8 @@
+@@ -2315,6 +2335,8 @@ static void rna_def_modifier_bevel(BlenderRNA *brna)
  	RNA_def_property_ui_text(prop, "Width", "Bevel value/amount");
  	RNA_def_property_update(prop, 0, "rna_Modifier_update");
  
@@ -77,7 +101,7 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  	prop = RNA_def_property(srna, "segments", PROP_INT, PROP_NONE);
  	RNA_def_property_int_sdna(prop, NULL, "res");
  	RNA_def_property_range(prop, 1, 100);
-@@ -3712,6 +3734,7 @@
+@@ -3712,6 +3734,7 @@ void RNA_def_modifier(BlenderRNA *brna)
  	/* types */
  	rna_def_modifier_subsurf(brna);
  	rna_def_modifier_lattice(brna);
@@ -85,23 +109,11 @@ Index: source/blender/makesrna/intern/rna_modifier.c
  	rna_def_modifier_curve(brna);
  	rna_def_modifier_build(brna);
  	rna_def_modifier_mirror(brna);
-Index: source/blender/modifiers/MOD_modifiertypes.h
-===================================================================
---- source/blender/modifiers/MOD_modifiertypes.h	(revision 55743)
-+++ source/blender/modifiers/MOD_modifiertypes.h	(working copy)
-@@ -50,6 +50,7 @@
- extern ModifierTypeInfo modifierType_Smooth;
- extern ModifierTypeInfo modifierType_Cast;
- extern ModifierTypeInfo modifierType_MeshDeform;
-+extern ModifierTypeInfo modifierType_Moebius;
- extern ModifierTypeInfo modifierType_ParticleSystem;
- extern ModifierTypeInfo modifierType_ParticleInstance;
- extern ModifierTypeInfo modifierType_Explode;
-Index: source/blender/modifiers/CMakeLists.txt
-===================================================================
---- source/blender/modifiers/CMakeLists.txt	(revision 55743)
-+++ source/blender/modifiers/CMakeLists.txt	(working copy)
-@@ -72,6 +72,7 @@
+diff --git source/blender/modifiers/CMakeLists.txt source/blender/modifiers/CMakeLists.txt
+index 9f1361b..c4f6b1b 100644
+--- source/blender/modifiers/CMakeLists.txt
++++ source/blender/modifiers/CMakeLists.txt
+@@ -72,6 +72,7 @@ set(SRC
  	intern/MOD_meshcache_util.c
  	intern/MOD_meshdeform.c
  	intern/MOD_mirror.c
@@ -109,11 +121,24 @@ Index: source/blender/modifiers/CMakeLists.txt
  	intern/MOD_multires.c
  	intern/MOD_none.c
  	intern/MOD_ocean.c
-Index: source/blender/modifiers/intern/MOD_moebius.c
-===================================================================
---- source/blender/modifiers/intern/MOD_moebius.c	(revision 0)
-+++ source/blender/modifiers/intern/MOD_moebius.c	(revision 0)
-@@ -0,0 +1,232 @@
+diff --git source/blender/modifiers/MOD_modifiertypes.h source/blender/modifiers/MOD_modifiertypes.h
+index bac75b3..6329335 100644
+--- source/blender/modifiers/MOD_modifiertypes.h
++++ source/blender/modifiers/MOD_modifiertypes.h
+@@ -50,6 +50,7 @@ extern ModifierTypeInfo modifierType_UVProject;
+ extern ModifierTypeInfo modifierType_Smooth;
+ extern ModifierTypeInfo modifierType_Cast;
+ extern ModifierTypeInfo modifierType_MeshDeform;
++extern ModifierTypeInfo modifierType_Moebius;
+ extern ModifierTypeInfo modifierType_ParticleSystem;
+ extern ModifierTypeInfo modifierType_ParticleInstance;
+ extern ModifierTypeInfo modifierType_Explode;
+diff --git source/blender/modifiers/intern/MOD_moebius.c source/blender/modifiers/intern/MOD_moebius.c
+new file mode 100644
+index 0000000..3b952dd
+--- /dev/null
++++ source/blender/modifiers/intern/MOD_moebius.c
+@@ -0,0 +1,234 @@
 +/*
 + * ***** BEGIN GPL LICENSE BLOCK *****
 + *
@@ -169,7 +194,6 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +
 +
 +static void calc_moebius_transform(Object *control, Object *target, float co[3]) {
-+	float mat[4][4];	
 +	float off[3];
 +	float radius;
 +	float leftQ[4]; 
@@ -177,11 +201,12 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	float hRot[4][4];
 +	float leftMat[4][4];
 +	float rightMat[4][4];
-+	float dist;
++	float distsq;
 +	float h[4];
 +	radius = 1.0f;
-+	
++
 +	sub_v3_v3v3(off,target->obmat[3],control->obmat[3]); //should be control.pos - target.pos
++
 +	mat4_to_quat(leftQ,control->obmat);
 +	mat4_to_quat(rightQ,control->obmat);
 +	
@@ -192,8 +217,8 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	leftMat[2][1] = leftMat[3][0] = leftQ[3];
 +	leftMat[1][3] = leftMat[2][0] = leftQ[2];
 +	leftMat[1][0] = leftMat[3][2] = leftQ[1];
-+	
-+	rightMat[0][0] = rightMat[1][1] = leftMat[2][2] = leftMat[3][3] = rightQ[0];
++
++	rightMat[0][0] = rightMat[1][1] = rightMat[2][2] = rightMat[3][3] = rightQ[0];
 +	rightMat[0][1] = rightMat[3][2] = -rightQ[1];
 +	rightMat[0][2] = rightMat[1][3] = -rightQ[2];
 +	rightMat[0][3] = rightMat[2][1] = -rightQ[3];
@@ -208,17 +233,19 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	mult_m4_m4m4(hRot,rightMat,leftMat);
 +	add_v3_v3(co,off);
 +	mul_v3_fl(co,1.0f/radius);
-+	dist= co[0]*co[0]+co[1]*co[1]+co[2]*co[2];
-+	h[0] = 2*co[0];
-+	h[1] = 2*co[1];
-+	h[2] = 2*co[2];
-+	h[3] = dist-1.0f;
-+	
-+	mul_v4_fl(h,1.0f/(1.0f+dist));
++	distsq = dot_v3v3(co, co);
++
++	//distsq = len_manhattan_v3(co)*len_manhattan_v3(co); // manhattan distance
++	//distsq = pow(co[0],4)+pow(co[1],4)+pow(co[2],4);  // 4th order minkowski distance (saw this on wikipedia)
++	//distsq = sqrt(dist);
++
++	mul_v3_v3fl(h, co, 2);
++
++	h[3] = distsq-1.0f;
++
++	mul_v4_fl(h,1.0f/(1.0f+distsq));
 +	mul_m4_v4(hRot,h);
-+	co[0] = h[0];
-+	co[1] = h[1];
-+	co[2] = h[2];
++	copy_v3_v3(co,h);
 +	mul_v3_fl(co,radius/(1.0f-h[3]));
 +	sub_v3_v3(co,off);	
 +}
@@ -346,11 +373,11 @@ Index: source/blender/modifiers/intern/MOD_moebius.c
 +	/* foreachIDLink */     NULL,
 +	/* foreachTexLink */    NULL,
 +};
-Index: source/blender/modifiers/intern/MOD_util.c
-===================================================================
---- source/blender/modifiers/intern/MOD_util.c	(revision 55743)
-+++ source/blender/modifiers/intern/MOD_util.c	(working copy)
-@@ -256,6 +256,7 @@
+diff --git source/blender/modifiers/intern/MOD_util.c source/blender/modifiers/intern/MOD_util.c
+index 1084023..8410cff 100644
+--- source/blender/modifiers/intern/MOD_util.c
++++ source/blender/modifiers/intern/MOD_util.c
+@@ -256,6 +256,7 @@ void modifier_type_init(ModifierTypeInfo *types[])
  	INIT_TYPE(Collision);
  	INIT_TYPE(Boolean);
  	INIT_TYPE(MeshDeform);
@@ -358,27 +385,3 @@ Index: source/blender/modifiers/intern/MOD_util.c
  	INIT_TYPE(Ocean);
  	INIT_TYPE(ParticleSystem);
  	INIT_TYPE(ParticleInstance);
-Index: source/blender/makesdna/DNA_modifier_types.h
-===================================================================
---- source/blender/makesdna/DNA_modifier_types.h	(revision 55743)
-+++ source/blender/makesdna/DNA_modifier_types.h	(working copy)
-@@ -79,6 +79,7 @@
- 	eModifierType_Triangulate       = 44,
- 	eModifierType_UVWarp            = 45,
- 	eModifierType_MeshCache         = 46,
-+	eModifierType_Moebius           = 47,
- 	NUM_MODIFIER_TYPES
- } ModifierType;
- 
-@@ -779,6 +780,11 @@
- // #define MOD_SCREW_OBJECT_ANGLE	(1 << 4)
- #define MOD_SCREW_SMOOTH_SHADING (1 << 5)
- 
-+typedef struct MoebiusModifierData {
-+	ModifierData modifier;
-+	struct Object *control;
-+} MoebiusModifierData;
-+
- typedef struct OceanModifierData {
- 	ModifierData modifier;
- 	

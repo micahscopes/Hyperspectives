@@ -56,7 +56,7 @@
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
 		<script type="x-shader/x-fragment" id="fragmentshader"></script>
 		
-		<script src="../js/three.js/build/Three.js"></script>
+		<script src="../js/three.js/build/three.js"></script>
 		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="../js/three.js/examples/js/Stats.js"></script>
 		<script src="../js/jquery-1.4.3.min.js"></script>
@@ -158,7 +158,7 @@
 				//
 
 				scene = new THREE.Scene();
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 100000 );
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 300, 100000 );
 				scene.add( camera );
 
 				camera.target = new THREE.Vector3( 0, 150, 3000 );
@@ -201,11 +201,12 @@
 								uniforms:     	uniforms,
 								vertexShader:   $('#vertexshader').text(),
 								fragmentShader: $('#fragmentshader').text(),
-								morphTargets: true
+								morphTargets: true,
+								side: THREE.DoubleSide
 							});
 							
 							var referenceObjectMaterial = new THREE.MeshBasicMaterial({wireframe: true, color: "0x444444"})	;
-							referenceObject = new THREE.Mesh( new THREE.CubeGeometry(350,0,350), referenceObjectMaterial);
+							referenceObject = new THREE.Mesh( new THREE.BoxGeometry(350,0,350), referenceObjectMaterial);
 							referenceObject.position.y = -96;
 							mesh = new THREE.Mesh( geometry, shaderMaterial );
 							mesh.position.y = -200;
@@ -223,16 +224,16 @@
 
 				renderer = new THREE.WebGLRenderer();
 				renderer.sortObjects = false;
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( window.innerWidth, window.innerHeight-75 );
 
 				container.appendChild(renderer.domElement);
 
 				//
 
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
+//				stats = new Stats();
+//				stats.domElement.style.position = 'absolute';
+//				stats.domElement.style.top = '0px';
+//				container.appendChild( stats.domElement );
 
 				document.addEventListener( 'keyup', onKeypress, false );
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -300,11 +301,14 @@
 
 			function animate() {
 				render();
-				stats.update();
+//				stats.update();
 
 			}
 
-			var theta = 0;
+			var q = new THREE.Quaternion();
+			var rotationVector = new THREE.Vector3( 0,0,1);
+			rotationVector.normalize();
+			var theta = 1.4;
 			var ms = Date.now();
 			var duration = 1000;
 			var keyframes = 15, interpolation = duration / keyframes;
@@ -314,14 +318,15 @@
 				theta += rotationSpeed*(Date.now()-ms)/800;
 				ms = Date.now();
 				var th = theta;
-				uniforms.leftIsoclinic.value = [	0,0,Math.cos(th),	-Math.sin(th)	];
-				uniforms.rightIsoclinic.value = [	0,0,Math.cos(th),	-Math.sin(th)	];
+				q.setFromAxisAngle( rotationVector, th );
+				uniforms.leftIsoclinic.value = [q.x,q.y,q.z,q.w];
+				uniforms.rightIsoclinic.value = [q.x,q.y,q.z,q.w];
 				
 				camera.position.x = radius*Math.cos(targetYRotation);
 				camera.position.z = radius*Math.sin(targetYRotation);
 				camera.position.y = radius*(Math.pow(Math.E,targetXRotation)-Math.pow(Math.E,-targetXRotation))/2
 				if ( referenceObject ) {
-					camera.lookAt(referenceObject.position.clone().addSelf(new THREE.Vector3(0,80,0)));
+					camera.lookAt(referenceObject.position.clone().add(new THREE.Vector3(0,80,0)));
 					if (camera.position.distanceTo(referenceObject.position) >1800) {
 						mesh.doubleSided = true;
 					} else {

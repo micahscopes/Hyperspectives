@@ -7,6 +7,11 @@ uniform float rightIsoclinic[ 4 ];
 uniform float radius;
 uniform float offset[ 3 ];
 varying vec3 vNormal;
+
+//for spherical env mapping, from http://www.clicktorelease.com/blog/creating-spherical-environment-mapping-shader
+varying vec3 e;
+varying vec3 n;
+
 #ifdef USE_MORPHTARGETS
 #ifndef USE_MORPHNORMALS
 uniform float morphTargetInfluences[ 8 ];
@@ -16,9 +21,9 @@ uniform float morphTargetInfluences[ 4 ];
 #endif
 
 void main() {
-	#ifdef USE_MORPHTARGETS
 	vec3 off = vec3(offset[0],offset[1],offset[2]);
-	vec3 pos = position;
+	vec3 pos = vec3(viewMatrix * vec4(position,1.0));
+	#ifdef USE_MORPHTARGETS
 	vec3 morphed = vec3( 0.0 );
 	morphed += ( morphTarget0 - pos ) * morphTargetInfluences[ 0 ];
 	morphed += ( morphTarget1 - pos ) * morphTargetInfluences[ 1 ];
@@ -62,7 +67,7 @@ void main() {
 	
 	mat4 hRot = mat4(a,-b,-c,-d,b,a,-d,c,c,d,a,-b,d,-c,b,a)*mat4(aa,-bb,-cc,-dd,bb,aa,dd,-cc,cc,-dd,aa,bb,dd,cc,-bb,aa);
 	vec3 p = (pos+off)/radius;
-	vec3 pn = p+(transformedNormal)/radius;
+	vec3 pn = p+(normal)/radius;
 	float dist = p[0]*p[0]+p[1]*p[1]+p[2]*p[2];
 	float distn = pn[0]*pn[0]+pn[1]*pn[1]+pn[2]*pn[2];
 	vec4 h = vec4(2.0*p,(dist-1.0));
@@ -74,8 +79,12 @@ void main() {
 	
 	vec3 newPosition = radius*(vec3(h[0],h[1],h[2])/(1.0-h[3]));
 	vNormal = radius*(vec3(hn[0],hn[1],hn[2])/(1.0-hn[3]))-newPosition;
-
-	gl_Position = projectionMatrix *
-				  modelViewMatrix *
-				  vec4(newPosition-off,1.0);
-}
+    
+    vec4 mvmPos =  modelViewMatrix * vec4(newPosition-off,1.0);
+	gl_Position = projectionMatrix * mvmPos;
+	
+	// env mapping			  
+    e = normalize( mvmPos.xyz);
+    n = normalize( normalMatrix*vNormal );
+    
+    }

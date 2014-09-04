@@ -34,17 +34,11 @@ projection and 4 dimensional rotation.  You can see that it takes two
 four-dimensional vectors as input.  Those are the parameters for the 
 [isoclinic rotation matrices][4], which should each have determinants 
 of 1 since they are rotations.  So you have to be careful what you put 
-in them!
+in them!  I usually generate these from a normalized quaternion representing
+the rotation of some dummy vector.
 
-### [Fragment Shader](http://hyperspectives.timbremill.net/shaders/moebiusVertex.glsl)
-This does the coloring.  It is very simple.  It takes the normal 
-vector and does a dot product with each eigenvector.  Since we are 
-shading in 3 dimensional space, there is conveniently one eigenvector 
-for each primary color!  In other words, each component red, green or blue
-value for a particular vertex is the dot product of the normal at that 
-vertex with one of the eigenvectors of 3D space.  This makes it look like
-there's a red light, a blue light and a green light all shining onto the origin
-at right angles from one another.
+### [Fragment Shader](http://hyperspectives.timbremill.net/shaders/rgbFragment.glsl)
+This basic one just shines red, green and blue lights along x, y and z respectively.
 
 More Information
 ----------------

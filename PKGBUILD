@@ -1,6 +1,6 @@
 # Maintainer: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 pkgname=hyperblender-git
-pkgver=67058.fe3fb236970
+pkgver=66001.90a77d04ce
 pkgrel=1
 pkgdesc="Blender moebius transformation mod"
 arch=('i686' 'x86_64')
@@ -19,14 +19,14 @@ install=blender.install
 # the path in .gitmodules.
 # More info:
 #   http://wiki.blender.org/index.php/Dev:Doc/Tools/Git
-source=('https://github.com/micahscopes/Hyperspectives.git#branch=hyperblender' \
+source=('blender::git://github.com/micahscopes/Hyperspectives.git#branch=hyperblender' \
         'blender-addons.git::git://git.blender.org/blender-addons.git' \
         'blender-addons-contrib.git::git://git.blender.org/blender-addons-contrib.git' \
         'blender-translations.git::git://git.blender.org/blender-translations.git' \
         'blender-dev-tools.git::git://git.blender.org/blender-dev-tools.git' \
         blender.desktop)
 md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
-         '47e5bbe93fc221066882947211ff7812')
+         'SKIP')
 
 # determine whether we can precompile CUDA kernels
 _CUDA_PKG=`pacman -Qq cuda 2>/dev/null` || true

@@ -1,6 +1,6 @@
 # Maintainer: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 pkgname=hyperblender-git
-pkgver=66001.90a77d04ce
+pkgver=66002.037a8c447c
 pkgrel=1
 pkgdesc="Blender moebius transformation mod"
 arch=('i686' 'x86_64')

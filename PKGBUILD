@@ -65,7 +65,7 @@ build() {
         -DPYTHON_VERSION=3.6m \
         -DWITH_MOD_OCEANSIM=ON \
         -DWITH_ALEMBIC=ON \
-	-DWITH_OPENSUBDIV=ON
+	-DWITH_OPENSUBDIV=ON \
   $_EXTRAOPTS
   make
 }

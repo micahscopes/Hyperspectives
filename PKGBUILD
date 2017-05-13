@@ -64,6 +64,7 @@ build() {
         -DWITH_PYTHON_INSTALL=OFF \
         -DPYTHON_VERSION=3.6m \
         -DWITH_MOD_OCEANSIM=ON \
+        -DWITH_ALEMBIC=ON
         $_EXTRAOPTS
   make
 }

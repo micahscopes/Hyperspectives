@@ -7,7 +7,7 @@ arch=('i686' 'x86_64')
 url="http://blender.org/"
 depends=('libgl' 'python' 'desktop-file-utils' 'hicolor-icon-theme'
          'ffmpeg' 'fftw' 'openal' 'freetype2' 'libxi' 'openimageio' 'opencolorio'
-         'openshadinglanguage' 'libtiff' 'libpng')
+         'openshadinglanguage' 'libtiff' 'libpng' 'opensubdiv')
 optdepends=('cuda: CUDA support in Cycles')
 makedepends=('git' 'cmake' 'boost' 'mesa')
 provides=('blender')
@@ -65,7 +65,8 @@ build() {
         -DPYTHON_VERSION=3.6m \
         -DWITH_MOD_OCEANSIM=ON \
         -DWITH_ALEMBIC=ON
-        $_EXTRAOPTS
+	-DWITH_OPENSUBDIV=ON
+  $_EXTRAOPTS
   make
 }
 

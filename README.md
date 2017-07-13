@@ -1,7 +1,8 @@
-HYPERSPECTIVES
+HYPERSPECTIVES 2012
 ===============
-This is going to be a collection of my experiments related to moebius 
-transformations and interesting mappings of 3d geometry.  The goal is 
+[![hyperhorse (2012)](https://user-images.githubusercontent.com/389782/169687511-5fbe7d83-923d-4622-9303-b11c2ed0458a.png)](http://hyperspectives.wondering.xyz/moebius/hyperhorse.html)
+
+A collection of experiments with 3D conformal inversions. The goal is 
 to offer unique perspectives on various aspects of what it means to be 
 a creature living in living in space and to learn about math in the
 process.
@@ -12,8 +13,8 @@ process.
 - [pretzel-donut](http://hyperspectives.wondering.xyz/moebius/hypertorusknot.html)
 ---------------------------------------------------------------------------
 ### What's going on here?
-The horse is inverse stereographically projected onto the hypersphere, 
-rotated, and projected back again. Dragging the mouse moves the 
+The horse is inverse stereographically projected onto a hypersphere, 
+rotated, and projected back again. Dragging moves the 
 camera. Pressing the left & right arrow keys decrements and 
 increments the rotation speed.
 
@@ -22,7 +23,7 @@ increments the rotation speed.
 Another big help is [Moebius Transformations
 Revealed][2], which shows the 2 dimensional Moebius transformations.  
 It really gives an idea of what's going on in a more familiar space.  
-And of course Wikipedia articles: [Stereographic projection][3], [Möbius
+And of course Wikipedia: [Stereographic projection][3], [Möbius
 transformation][4], [Isoclinic decomposition.][5]
 
   [1]: http://spacesymmetrystructure.wordpress.com/category/Inversion/

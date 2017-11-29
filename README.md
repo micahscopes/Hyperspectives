@@ -6,9 +6,9 @@ to offer unique perspectives on various aspects of what it means to be
 a creature living in living in space and to learn about math in the
 process.
 
-# - [cube](http://hyperspectives.wondering.xyz/moebius/cube.html)
-# - [hyper horse](http://hyperspectives.wondering.xyz/moebius/hyperhorse.html)
-# - [pretzel-donut](http://hyperspectives.wondering.xyz/moebius/hypertorusknot.html)
+- [cube](http://hyperspectives.wondering.xyz/moebius/cube.html)
+- [hyper horse](http://hyperspectives.wondering.xyz/moebius/hyperhorse.html)
+- [pretzel-donut](http://hyperspectives.wondering.xyz/moebius/hypertorusknot.html)
 ---------------------------------------------------------------------------
 ### What's going on here?
 The horse is inverse stereographically projected onto the hypersphere, 

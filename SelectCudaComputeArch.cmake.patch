@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<title>SelectCudaComputeArch.cmake.patch - aur.git - AUR Package Repositories</title>
+<meta name='generator' content='cgit '/>
+<meta name='robots' content='index, nofollow'/>
+<link rel='stylesheet' type='text/css' href='/css/cgit.css'/>
+<link rel='shortcut icon' href='/images/favicon.ico'/>
+<link rel='alternate' title='Atom feed' href='https://aur.archlinux.org/cgit/aur.git/atom/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git' type='application/atom+xml'/>
+<link rel='vcs-git' href='https://aur.archlinux.org/blender-2.8-git.git/' title='aur.git Git repository'/>
+</head>
+<body>
+		<div id="archnavbar" class="anb-aur">
+			<div id="archnavbarlogo"><h1><a href="/" title="Return to the main page">Arch Linux User Repository</a></h1></div>
+			<div id="archnavbarmenu">
+				<ul id="archnavbarlist">
+					<li id="anb-home"><a href="https://www.archlinux.org/" title="Arch news, packages, projects and more">Home</a></li>
+					<li id="anb-packages"><a href="https://www.archlinux.org/packages/" title="Arch Package Database">Packages</a></li>
+					<li id="anb-forums"><a href="https://bbs.archlinux.org/" title="Community forums">Forums</a></li>
+					<li id="anb-wiki"><a href="https://wiki.archlinux.org/" title="Community documentation">Wiki</a></li>
+					<li id="anb-bugs"><a href="https://bugs.archlinux.org/" title="Report and track bugs">Bugs</a></li>
+					<li id="anb-security"><a href="https://security.archlinux.org/" title="Arch Linux Security Tracker">Security</a></li>
+					<li id="anb-aur"><a href="/" title="Arch Linux User Repository">AUR</a></li>
+					<li id="anb-download"><a href="https://www.archlinux.org/download/" title="Get Arch Linux">Download</a></li>
+				</ul>
+			</div>
+		</div><!-- #archnavbar -->
+<div id='cgit'><table id='header'>
+<tr>
+<td class='main'>AUR : blender-2.8-git.git</td></tr>
+<tr><td class='sub'>AUR Package Repositories | click <a href='/pkgbase/blender-2.8-git/'>here</a> to return to the package base details page</td><td class='sub right'></td></tr></table>
+<table class='tabs'><tr><td>
+<a href='/cgit/aur.git/?h=blender-2.8-git'>summary</a><a href='/cgit/aur.git/log/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>log</a><a class='active' href='/cgit/aur.git/tree/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>tree</a><a href='/cgit/aur.git/commit/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>commit</a><a href='/cgit/aur.git/diff/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>diff</a><a href='/cgit/aur.git/stats/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>stats</a></td><td class='form'><form class='right' method='get' action='/cgit/aur.git/log/SelectCudaComputeArch.cmake.patch'>
+<input type='hidden' name='h' value='blender-2.8-git'/><select name='qt'>
+<option value='grep'>log msg</option>
+<option value='author'>author</option>
+<option value='committer'>committer</option>
+<option value='range'>range</option>
+</select>
+<input class='txt' type='text' size='10' name='q' value=''/>
+<input type='submit' value='search'/>
+</form>
+</td></tr></table>
+<div class='path'>path: <a href='/cgit/aur.git/tree/?h=blender-2.8-git'>root</a>/<a href='/cgit/aur.git/tree/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>SelectCudaComputeArch.cmake.patch</a></div><div class='content'>blob: 9e0cead490083437e70a24a1b72a31e1396eff78 (<a href='/cgit/aur.git/plain/SelectCudaComputeArch.cmake.patch?h=blender-2.8-git'>plain</a>)
+<table summary='blob content' class='blob'>
+<tr><td class='linenumbers'><pre><a id='n1' href='#n1'>1</a>
+<a id='n2' href='#n2'>2</a>
+<a id='n3' href='#n3'>3</a>
+<a id='n4' href='#n4'>4</a>
+<a id='n5' href='#n5'>5</a>
+<a id='n6' href='#n6'>6</a>
+<a id='n7' href='#n7'>7</a>
+<a id='n8' href='#n8'>8</a>
+<a id='n9' href='#n9'>9</a>
+<a id='n10' href='#n10'>10</a>
+<a id='n11' href='#n11'>11</a>
+<a id='n12' href='#n12'>12</a>
+<a id='n13' href='#n13'>13</a>
+<a id='n14' href='#n14'>14</a>
+<a id='n15' href='#n15'>15</a>
+<a id='n16' href='#n16'>16</a>
+<a id='n17' href='#n17'>17</a>
+<a id='n18' href='#n18'>18</a>
+<a id='n19' href='#n19'>19</a>
+<a id='n20' href='#n20'>20</a>
+<a id='n21' href='#n21'>21</a>
+<a id='n22' href='#n22'>22</a>
+<a id='n23' href='#n23'>23</a>
+<a id='n24' href='#n24'>24</a>
+<a id='n25' href='#n25'>25</a>
+<a id='n26' href='#n26'>26</a>
+<a id='n27' href='#n27'>27</a>
+<a id='n28' href='#n28'>28</a>
+<a id='n29' href='#n29'>29</a>
+<a id='n30' href='#n30'>30</a>
+<a id='n31' href='#n31'>31</a>
+<a id='n32' href='#n32'>32</a>
+<a id='n33' href='#n33'>33</a>
+<a id='n34' href='#n34'>34</a>
+<a id='n35' href='#n35'>35</a>
+<a id='n36' href='#n36'>36</a>
+<a id='n37' href='#n37'>37</a>
+<a id='n38' href='#n38'>38</a>
+<a id='n39' href='#n39'>39</a>
+<a id='n40' href='#n40'>40</a>
+<a id='n41' href='#n41'>41</a>
+<a id='n42' href='#n42'>42</a>
+<a id='n43' href='#n43'>43</a>
+<a id='n44' href='#n44'>44</a>
+<a id='n45' href='#n45'>45</a>
+<a id='n46' href='#n46'>46</a>
+<a id='n47' href='#n47'>47</a>
+<a id='n48' href='#n48'>48</a>
+<a id='n49' href='#n49'>49</a>
+<a id='n50' href='#n50'>50</a>
+<a id='n51' href='#n51'>51</a>
+<a id='n52' href='#n52'>52</a>
+<a id='n53' href='#n53'>53</a>
+<a id='n54' href='#n54'>54</a>
+<a id='n55' href='#n55'>55</a>
+<a id='n56' href='#n56'>56</a>
+<a id='n57' href='#n57'>57</a>
+<a id='n58' href='#n58'>58</a>
+<a id='n59' href='#n59'>59</a>
+<a id='n60' href='#n60'>60</a>
+<a id='n61' href='#n61'>61</a>
+<a id='n62' href='#n62'>62</a>
+<a id='n63' href='#n63'>63</a>
+<a id='n64' href='#n64'>64</a>
+<a id='n65' href='#n65'>65</a>
+<a id='n66' href='#n66'>66</a>
+<a id='n67' href='#n67'>67</a>
+<a id='n68' href='#n68'>68</a>
+<a id='n69' href='#n69'>69</a>
+<a id='n70' href='#n70'>70</a>
+<a id='n71' href='#n71'>71</a>
+<a id='n72' href='#n72'>72</a>
+<a id='n73' href='#n73'>73</a>
+<a id='n74' href='#n74'>74</a>
+<a id='n75' href='#n75'>75</a>
+<a id='n76' href='#n76'>76</a>
+<a id='n77' href='#n77'>77</a>
+<a id='n78' href='#n78'>78</a>
+<a id='n79' href='#n79'>79</a>
+<a id='n80' href='#n80'>80</a>
+<a id='n81' href='#n81'>81</a>
+<a id='n82' href='#n82'>82</a>
+<a id='n83' href='#n83'>83</a>
+<a id='n84' href='#n84'>84</a>
+<a id='n85' href='#n85'>85</a>
+<a id='n86' href='#n86'>86</a>
+<a id='n87' href='#n87'>87</a>
+<a id='n88' href='#n88'>88</a>
+<a id='n89' href='#n89'>89</a>
+<a id='n90' href='#n90'>90</a>
+<a id='n91' href='#n91'>91</a>
+<a id='n92' href='#n92'>92</a>
+<a id='n93' href='#n93'>93</a>
+<a id='n94' href='#n94'>94</a>
+<a id='n95' href='#n95'>95</a>
+<a id='n96' href='#n96'>96</a>
+<a id='n97' href='#n97'>97</a>
+<a id='n98' href='#n98'>98</a>
+<a id='n99' href='#n99'>99</a>
+<a id='n100' href='#n100'>100</a>
+<a id='n101' href='#n101'>101</a>
+<a id='n102' href='#n102'>102</a>
+<a id='n103' href='#n103'>103</a>
+<a id='n104' href='#n104'>104</a>
+<a id='n105' href='#n105'>105</a>
+<a id='n106' href='#n106'>106</a>
+<a id='n107' href='#n107'>107</a>
+<a id='n108' href='#n108'>108</a>
+<a id='n109' href='#n109'>109</a>
+<a id='n110' href='#n110'>110</a>
+<a id='n111' href='#n111'>111</a>
+<a id='n112' href='#n112'>112</a>
+<a id='n113' href='#n113'>113</a>
+<a id='n114' href='#n114'>114</a>
+<a id='n115' href='#n115'>115</a>
+<a id='n116' href='#n116'>116</a>
+<a id='n117' href='#n117'>117</a>
+<a id='n118' href='#n118'>118</a>
+<a id='n119' href='#n119'>119</a>
+<a id='n120' href='#n120'>120</a>
+<a id='n121' href='#n121'>121</a>
+<a id='n122' href='#n122'>122</a>
+<a id='n123' href='#n123'>123</a>
+<a id='n124' href='#n124'>124</a>
+<a id='n125' href='#n125'>125</a>
+<a id='n126' href='#n126'>126</a>
+<a id='n127' href='#n127'>127</a>
+<a id='n128' href='#n128'>128</a>
+<a id='n129' href='#n129'>129</a>
+<a id='n130' href='#n130'>130</a>
+<a id='n131' href='#n131'>131</a>
+<a id='n132' href='#n132'>132</a>
+<a id='n133' href='#n133'>133</a>
+<a id='n134' href='#n134'>134</a>
+<a id='n135' href='#n135'>135</a>
+<a id='n136' href='#n136'>136</a>
+<a id='n137' href='#n137'>137</a>
+<a id='n138' href='#n138'>138</a>
+<a id='n139' href='#n139'>139</a>
+<a id='n140' href='#n140'>140</a>
+<a id='n141' href='#n141'>141</a>
+<a id='n142' href='#n142'>142</a>
+<a id='n143' href='#n143'>143</a>
+<a id='n144' href='#n144'>144</a>
+<a id='n145' href='#n145'>145</a>
+<a id='n146' href='#n146'>146</a>
+<a id='n147' href='#n147'>147</a>
+<a id='n148' href='#n148'>148</a>
+<a id='n149' href='#n149'>149</a>
+<a id='n150' href='#n150'>150</a>
+<a id='n151' href='#n151'>151</a>
+<a id='n152' href='#n152'>152</a>
+<a id='n153' href='#n153'>153</a>
+<a id='n154' href='#n154'>154</a>
+<a id='n155' href='#n155'>155</a>
+<a id='n156' href='#n156'>156</a>
+<a id='n157' href='#n157'>157</a>
+<a id='n158' href='#n158'>158</a>
+<a id='n159' href='#n159'>159</a>
+<a id='n160' href='#n160'>160</a>
+<a id='n161' href='#n161'>161</a>
+<a id='n162' href='#n162'>162</a>
+<a id='n163' href='#n163'>163</a>
+<a id='n164' href='#n164'>164</a>
+<a id='n165' href='#n165'>165</a>
+<a id='n166' href='#n166'>166</a>
+<a id='n167' href='#n167'>167</a>
+<a id='n168' href='#n168'>168</a>
+<a id='n169' href='#n169'>169</a>
+<a id='n170' href='#n170'>170</a>
+<a id='n171' href='#n171'>171</a>
+<a id='n172' href='#n172'>172</a>
+<a id='n173' href='#n173'>173</a>
+<a id='n174' href='#n174'>174</a>
+<a id='n175' href='#n175'>175</a>
+<a id='n176' href='#n176'>176</a>
+<a id='n177' href='#n177'>177</a>
+<a id='n178' href='#n178'>178</a>
+<a id='n179' href='#n179'>179</a>
+<a id='n180' href='#n180'>180</a>
+<a id='n181' href='#n181'>181</a>
+<a id='n182' href='#n182'>182</a>
+<a id='n183' href='#n183'>183</a>
+<a id='n184' href='#n184'>184</a>
+<a id='n185' href='#n185'>185</a>
+<a id='n186' href='#n186'>186</a>
+<a id='n187' href='#n187'>187</a>
+<a id='n188' href='#n188'>188</a>
+<a id='n189' href='#n189'>189</a>
+<a id='n190' href='#n190'>190</a>
+<a id='n191' href='#n191'>191</a>
+<a id='n192' href='#n192'>192</a>
+<a id='n193' href='#n193'>193</a>
+<a id='n194' href='#n194'>194</a>
+<a id='n195' href='#n195'>195</a>
+<a id='n196' href='#n196'>196</a>
+<a id='n197' href='#n197'>197</a>
+<a id='n198' href='#n198'>198</a>
+<a id='n199' href='#n199'>199</a>
+<a id='n200' href='#n200'>200</a>
+<a id='n201' href='#n201'>201</a>
+<a id='n202' href='#n202'>202</a>
+<a id='n203' href='#n203'>203</a>
+<a id='n204' href='#n204'>204</a>
+<a id='n205' href='#n205'>205</a>
+<a id='n206' href='#n206'>206</a>
+<a id='n207' href='#n207'>207</a>
+<a id='n208' href='#n208'>208</a>
+<a id='n209' href='#n209'>209</a>
+<a id='n210' href='#n210'>210</a>
+<a id='n211' href='#n211'>211</a>
+<a id='n212' href='#n212'>212</a>
+<a id='n213' href='#n213'>213</a>
+<a id='n214' href='#n214'>214</a>
+<a id='n215' href='#n215'>215</a>
+<a id='n216' href='#n216'>216</a>
+<a id='n217' href='#n217'>217</a>
+<a id='n218' href='#n218'>218</a>
+<a id='n219' href='#n219'>219</a>
+<a id='n220' href='#n220'>220</a>
+<a id='n221' href='#n221'>221</a>
+<a id='n222' href='#n222'>222</a>
+<a id='n223' href='#n223'>223</a>
+<a id='n224' href='#n224'>224</a>
+<a id='n225' href='#n225'>225</a>
+<a id='n226' href='#n226'>226</a>
+<a id='n227' href='#n227'>227</a>
+<a id='n228' href='#n228'>228</a>
+<a id='n229' href='#n229'>229</a>
+<a id='n230' href='#n230'>230</a>
+<a id='n231' href='#n231'>231</a>
+<a id='n232' href='#n232'>232</a>
+<a id='n233' href='#n233'>233</a>
+<a id='n234' href='#n234'>234</a>
+<a id='n235' href='#n235'>235</a>
+<a id='n236' href='#n236'>236</a>
+<a id='n237' href='#n237'>237</a>
+<a id='n238' href='#n238'>238</a>
+<a id='n239' href='#n239'>239</a>
+<a id='n240' href='#n240'>240</a>
+<a id='n241' href='#n241'>241</a>
+<a id='n242' href='#n242'>242</a>
+<a id='n243' href='#n243'>243</a>
+<a id='n244' href='#n244'>244</a>
+<a id='n245' href='#n245'>245</a>
+<a id='n246' href='#n246'>246</a>
+<a id='n247' href='#n247'>247</a>
+<a id='n248' href='#n248'>248</a>
+<a id='n249' href='#n249'>249</a>
+</pre></td>
+<td class='lines'><pre><code>diff --git a/build_files/cmake/SelectCudaComputeArch.cmake b/build_files/cmake/SelectCudaComputeArch.cmake
+new file mode 100644
+index 00000000000..c3bf8639460
+<span class="hl kwb">--- /dev/null</span>
+<span class="hl kwa">+++ b/build_files/cmake/SelectCudaComputeArch.cmake</span>
+<span class="hl kwd">&#64;&#64; -0,0 +1,225 &#64;&#64;</span>
+<span class="hl kwa">+# CMake - Cross Platform Makefile Generator</span>
+<span class="hl kwa">+# Copyright 2000-2017 Kitware, Inc. and Contributors</span>
+<span class="hl kwa">+# All rights reserved.</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+# Redistribution and use in source and binary forms, with or without</span>
+<span class="hl kwa">+# modification, are permitted provided that the following conditions</span>
+<span class="hl kwa">+# are met:</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+# * Redistributions of source code must retain the above copyright</span>
+<span class="hl kwa">+#   notice, this list of conditions and the following disclaimer.</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+# * Redistributions in binary form must reproduce the above copyright</span>
+<span class="hl kwa">+#   notice, this list of conditions and the following disclaimer in the</span>
+<span class="hl kwa">+#   documentation and/or other materials provided with the distribution.</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+# * Neither the name of Kitware, Inc. nor the names of Contributors</span>
+<span class="hl kwa">+#   may be used to endorse or promote products derived from this</span>
+<span class="hl kwa">+#   software without specific prior written permission.</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span>
+<span class="hl kwa">+# &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span>
+<span class="hl kwa">+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</span>
+<span class="hl kwa">+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span>
+<span class="hl kwa">+# HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="hl kwa">+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="hl kwa">+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span>
+<span class="hl kwa">+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span>
+<span class="hl kwa">+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="hl kwa">+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="hl kwa">+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+# Synopsis:</span>
+<span class="hl kwa">+#   CUDA_SELECT_NVCC_ARCH_FLAGS(out_variable [target_CUDA_architectures])</span>
+<span class="hl kwa">+#   -- Selects GPU arch flags for nvcc based on target_CUDA_architectures</span>
+<span class="hl kwa">+#      target_CUDA_architectures : Auto | Common | All | LIST(ARCH_AND_PTX ...)</span>
+<span class="hl kwa">+#       - &quot;Auto&quot; detects local machine GPU compute arch at runtime.</span>
+<span class="hl kwa">+#       - &quot;Common&quot; and &quot;All&quot; cover common and entire subsets of architectures</span>
+<span class="hl kwa">+#      ARCH_AND_PTX : NAME | NUM.NUM | NUM.NUM(NUM.NUM) | NUM.NUM+PTX</span>
+<span class="hl kwa">+#      NAME: Fermi Kepler Maxwell Kepler+Tegra Kepler+Tesla Maxwell+Tegra Pascal</span>
+<span class="hl kwa">+#      NUM: Any number. Only those pairs are currently accepted by NVCC though:</span>
+<span class="hl kwa">+#            2.0 2.1 3.0 3.2 3.5 3.7 5.0 5.2 5.3 6.0 6.2</span>
+<span class="hl kwa">+#      Returns LIST of flags to be added to CUDA_NVCC_FLAGS in ${out_variable}</span>
+<span class="hl kwa">+#      Additionally, sets ${out_variable}_readable to the resulting numeric list</span>
+<span class="hl kwa">+#      Example:</span>
+<span class="hl kwa">+#       CUDA_SELECT_NVCC_ARCH_FLAGS(ARCH_FLAGS 3.0 3.5+PTX 5.2(5.0) Maxwell)</span>
+<span class="hl kwa">+#        LIST(APPEND CUDA_NVCC_FLAGS ${ARCH_FLAGS})</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+#      More info on CUDA architectures: https://en.wikipedia.org/wiki/CUDA</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+# This list will be used for CUDA_ARCH_NAME = All option</span>
+<span class="hl kwa">+set(CUDA_KNOWN_GPU_ARCHITECTURES  &quot;Fermi&quot; &quot;Kepler&quot; &quot;Maxwell&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+# This list will be used for CUDA_ARCH_NAME = Common option (enabled by default)</span>
+<span class="hl kwa">+set(CUDA_COMMON_GPU_ARCHITECTURES &quot;3.0&quot; &quot;3.5&quot; &quot;5.0&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+if (CUDA_VERSION VERSION_GREATER &quot;6.5&quot;)</span>
+<span class="hl kwa">+  list(APPEND CUDA_KNOWN_GPU_ARCHITECTURES &quot;Kepler+Tegra&quot; &quot;Kepler+Tesla&quot; &quot;Maxwell+Tegra&quot;)</span>
+<span class="hl kwa">+  list(APPEND CUDA_COMMON_GPU_ARCHITECTURES &quot;5.2&quot;)</span>
+<span class="hl kwa">+endif ()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+if (CUDA_VERSION VERSION_GREATER &quot;7.5&quot;)</span>
+<span class="hl kwa">+  list(APPEND CUDA_KNOWN_GPU_ARCHITECTURES &quot;Pascal&quot;)</span>
+<span class="hl kwa">+  list(APPEND CUDA_COMMON_GPU_ARCHITECTURES &quot;6.0&quot; &quot;6.1&quot; &quot;6.1+PTX&quot;)</span>
+<span class="hl kwa">+else()</span>
+<span class="hl kwa">+  list(APPEND CUDA_COMMON_GPU_ARCHITECTURES &quot;5.2+PTX&quot;)</span>
+<span class="hl kwa">+endif ()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+################################################################################################</span>
+<span class="hl kwa">+# A function for automatic detection of GPUs installed  (if autodetection is enabled)</span>
+<span class="hl kwa">+# Usage:</span>
+<span class="hl kwa">+#   CUDA_DETECT_INSTALLED_GPUS(OUT_VARIABLE)</span>
+<span class="hl kwa">+#</span>
+<span class="hl kwa">+function(CUDA_DETECT_INSTALLED_GPUS OUT_VARIABLE)</span>
+<span class="hl kwa">+  if(NOT CUDA_GPU_DETECT_OUTPUT)</span>
+<span class="hl kwa">+    set(cufile ${PROJECT_BINARY_DIR}/detect_cuda_archs.cu)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+    file(WRITE ${cufile} &quot;&quot;</span>
+<span class="hl kwa">+      &quot;#include &lt;cstdio&gt;\n&quot;</span>
+<span class="hl kwa">+      &quot;int main()\n&quot;</span>
+<span class="hl kwa">+      &quot;{\n&quot;</span>
+<span class="hl kwa">+      &quot;  int count = 0;\n&quot;</span>
+<span class="hl kwa">+      &quot;  if (cudaSuccess != cudaGetDeviceCount(&amp;count)) return -1;\n&quot;</span>
+<span class="hl kwa">+      &quot;  if (count == 0) return -1;\n&quot;</span>
+<span class="hl kwa">+      &quot;  for (int device = 0; device &lt; count; ++device)\n&quot;</span>
+<span class="hl kwa">+      &quot;  {\n&quot;</span>
+<span class="hl kwa">+      &quot;    cudaDeviceProp prop;\n&quot;</span>
+<span class="hl kwa">+      &quot;    if (cudaSuccess == cudaGetDeviceProperties(&amp;prop, device))\n&quot;</span>
+<span class="hl kwa">+      &quot;      std::printf(\&quot;%d.%d \&quot;, prop.major, prop.minor);\n&quot;</span>
+<span class="hl kwa">+      &quot;  }\n&quot;</span>
+<span class="hl kwa">+      &quot;  return 0;\n&quot;</span>
+<span class="hl kwa">+      &quot;}\n&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+    execute_process(COMMAND &quot;${CUDA_NVCC_EXECUTABLE}&quot; &quot;--run&quot; &quot;${cufile}&quot;</span>
+<span class="hl kwa">+                    WORKING_DIRECTORY &quot;${PROJECT_BINARY_DIR}/CMakeFiles/&quot;</span>
+<span class="hl kwa">+                    RESULT_VARIABLE nvcc_res OUTPUT_VARIABLE nvcc_out</span>
+<span class="hl kwa">+                    ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+    if(nvcc_res EQUAL 0)</span>
+<span class="hl kwa">+      string(REPLACE &quot;2.1&quot; &quot;2.1(2.0)&quot; nvcc_out &quot;${nvcc_out}&quot;)</span>
+<span class="hl kwa">+      set(CUDA_GPU_DETECT_OUTPUT ${nvcc_out} CACHE INTERNAL &quot;Returned GPU architetures from detect_gpus tool&quot; FORCE)</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  if(NOT CUDA_GPU_DETECT_OUTPUT)</span>
+<span class="hl kwa">+    message(STATUS &quot;Automatic GPU detection failed. Building for common architectures.&quot;)</span>
+<span class="hl kwa">+    set(${OUT_VARIABLE} ${CUDA_COMMON_GPU_ARCHITECTURES} PARENT_SCOPE)</span>
+<span class="hl kwa">+  else()</span>
+<span class="hl kwa">+    set(${OUT_VARIABLE} ${CUDA_GPU_DETECT_OUTPUT} PARENT_SCOPE)</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+endfunction()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+################################################################################################</span>
+<span class="hl kwa">+# Function for selecting GPU arch flags for nvcc based on CUDA architectures from parameter list</span>
+<span class="hl kwa">+# Usage:</span>
+<span class="hl kwa">+#   SELECT_NVCC_ARCH_FLAGS(out_variable [list of CUDA compute archs])</span>
+<span class="hl kwa">+function(CUDA_SELECT_NVCC_ARCH_FLAGS out_variable)</span>
+<span class="hl kwa">+  set(CUDA_ARCH_LIST &quot;${ARGN}&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  if(&quot;X${CUDA_ARCH_LIST}&quot; STREQUAL &quot;X&quot; )</span>
+<span class="hl kwa">+    set(CUDA_ARCH_LIST &quot;Auto&quot;)</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  set(cuda_arch_bin)</span>
+<span class="hl kwa">+  set(cuda_arch_ptx)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  if(&quot;${CUDA_ARCH_LIST}&quot; STREQUAL &quot;All&quot;)</span>
+<span class="hl kwa">+    set(CUDA_ARCH_LIST ${CUDA_KNOWN_GPU_ARCHITECTURES})</span>
+<span class="hl kwa">+  elseif(&quot;${CUDA_ARCH_LIST}&quot; STREQUAL &quot;Common&quot;)</span>
+<span class="hl kwa">+    set(CUDA_ARCH_LIST ${CUDA_COMMON_GPU_ARCHITECTURES})</span>
+<span class="hl kwa">+  elseif(&quot;${CUDA_ARCH_LIST}&quot; STREQUAL &quot;Auto&quot;)</span>
+<span class="hl kwa">+    CUDA_DETECT_INSTALLED_GPUS(CUDA_ARCH_LIST)</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  # Now process the list and look for names</span>
+<span class="hl kwa">+  string(REGEX REPLACE &quot;[ \t]+&quot; &quot;;&quot; CUDA_ARCH_LIST &quot;${CUDA_ARCH_LIST}&quot;)</span>
+<span class="hl kwa">+  list(REMOVE_DUPLICATES CUDA_ARCH_LIST)</span>
+<span class="hl kwa">+  foreach(arch_name ${CUDA_ARCH_LIST})</span>
+<span class="hl kwa">+    set(arch_bin)</span>
+<span class="hl kwa">+    set(add_ptx FALSE)</span>
+<span class="hl kwa">+    # Check to see if we are compiling PTX</span>
+<span class="hl kwa">+    if(arch_name MATCHES &quot;(.*)\\+PTX$&quot;)</span>
+<span class="hl kwa">+      set(add_ptx TRUE)</span>
+<span class="hl kwa">+      set(arch_name ${CMAKE_MATCH_1})</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+    if(arch_name MATCHES &quot;^([0-9]\\.[0-9](\\([0-9]\\.[0-9]\\))?)$&quot;)</span>
+<span class="hl kwa">+      set(arch_bin ${CMAKE_MATCH_1})</span>
+<span class="hl kwa">+      set(arch_ptx ${arch_bin})</span>
+<span class="hl kwa">+    else()</span>
+<span class="hl kwa">+      # Look for it in our list of known architectures</span>
+<span class="hl kwa">+      if(${arch_name} STREQUAL &quot;Fermi&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 2.0 &quot;2.1(2.0)&quot;)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Kepler+Tegra&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 3.2)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Kepler+Tesla&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 3.7)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Kepler&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 3.0 3.5)</span>
+<span class="hl kwa">+        set(arch_ptx 3.5)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Maxwell+Tegra&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 5.3)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Maxwell&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 5.0 5.2)</span>
+<span class="hl kwa">+        set(arch_ptx 5.2)</span>
+<span class="hl kwa">+      elseif(${arch_name} STREQUAL &quot;Pascal&quot;)</span>
+<span class="hl kwa">+        set(arch_bin 6.0 6.1)</span>
+<span class="hl kwa">+        set(arch_ptx 6.1)</span>
+<span class="hl kwa">+      else()</span>
+<span class="hl kwa">+        message(SEND_ERROR &quot;Unknown CUDA Architecture Name ${arch_name} in CUDA_SELECT_NVCC_ARCH_FLAGS&quot;)</span>
+<span class="hl kwa">+      endif()</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+    if(NOT arch_bin)</span>
+<span class="hl kwa">+      message(SEND_ERROR &quot;arch_bin wasn&apos;t set for some reason&quot;)</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+    list(APPEND cuda_arch_bin ${arch_bin})</span>
+<span class="hl kwa">+    if(add_ptx)</span>
+<span class="hl kwa">+      if (NOT arch_ptx)</span>
+<span class="hl kwa">+        set(arch_ptx ${arch_bin})</span>
+<span class="hl kwa">+      endif()</span>
+<span class="hl kwa">+      list(APPEND cuda_arch_ptx ${arch_ptx})</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+  endforeach()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  # remove dots and convert to lists</span>
+<span class="hl kwa">+  string(REGEX REPLACE &quot;\\.&quot; &quot;&quot; cuda_arch_bin &quot;${cuda_arch_bin}&quot;)</span>
+<span class="hl kwa">+  string(REGEX REPLACE &quot;\\.&quot; &quot;&quot; cuda_arch_ptx &quot;${cuda_arch_ptx}&quot;)</span>
+<span class="hl kwa">+  string(REGEX MATCHALL &quot;[0-9()]+&quot; cuda_arch_bin &quot;${cuda_arch_bin}&quot;)</span>
+<span class="hl kwa">+  string(REGEX MATCHALL &quot;[0-9]+&quot;   cuda_arch_ptx &quot;${cuda_arch_ptx}&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  if(cuda_arch_bin)</span>
+<span class="hl kwa">+    list(REMOVE_DUPLICATES cuda_arch_bin)</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+  if(cuda_arch_ptx)</span>
+<span class="hl kwa">+    list(REMOVE_DUPLICATES cuda_arch_ptx)</span>
+<span class="hl kwa">+  endif()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  set(nvcc_flags &quot;&quot;)</span>
+<span class="hl kwa">+  set(nvcc_archs_readable &quot;&quot;)</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  # Tell NVCC to add binaries for the specified GPUs</span>
+<span class="hl kwa">+  foreach(arch ${cuda_arch_bin})</span>
+<span class="hl kwa">+    if(arch MATCHES &quot;([0-9]+)\\(([0-9]+)\\)&quot;)</span>
+<span class="hl kwa">+      # User explicitly specified ARCH for the concrete CODE</span>
+<span class="hl kwa">+      list(APPEND nvcc_flags -gencode arch=compute_${CMAKE_MATCH_2},code=sm_${CMAKE_MATCH_1})</span>
+<span class="hl kwa">+      list(APPEND nvcc_archs_readable sm_${CMAKE_MATCH_1})</span>
+<span class="hl kwa">+    else()</span>
+<span class="hl kwa">+      # User didn&apos;t explicitly specify ARCH for the concrete CODE, we assume ARCH=CODE</span>
+<span class="hl kwa">+      list(APPEND nvcc_flags -gencode arch=compute_${arch},code=sm_${arch})</span>
+<span class="hl kwa">+      list(APPEND nvcc_archs_readable sm_${arch})</span>
+<span class="hl kwa">+    endif()</span>
+<span class="hl kwa">+  endforeach()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  # Tell NVCC to add PTX intermediate code for the specified architectures</span>
+<span class="hl kwa">+  foreach(arch ${cuda_arch_ptx})</span>
+<span class="hl kwa">+    list(APPEND nvcc_flags -gencode arch=compute_${arch},code=compute_${arch})</span>
+<span class="hl kwa">+    list(APPEND nvcc_archs_readable compute_${arch})</span>
+<span class="hl kwa">+  endforeach()</span>
+<span class="hl kwa">+</span>
+<span class="hl kwa">+  string(REPLACE &quot;;&quot; &quot; &quot; nvcc_archs_readable &quot;${nvcc_archs_readable}&quot;)</span>
+<span class="hl kwa">+  set(${out_variable}          ${nvcc_flags}          PARENT_SCOPE)</span>
+<span class="hl kwa">+  set(${out_variable}_readable ${nvcc_archs_readable} PARENT_SCOPE)</span>
+<span class="hl kwa">+endfunction()</span>
+diff --git a/intern/cycles/cmake/external_libs.cmake b/intern/cycles/cmake/external_libs.cmake
+index df88b91f5ac..4b3335122b2 100644
+<span class="hl kwb">--- a/intern/cycles/cmake/external_libs.cmake</span>
+<span class="hl kwa">+++ b/intern/cycles/cmake/external_libs.cmake</span>
+&#64;&#64; -41,6 +41,13 &#64;&#64; if(WITH_CYCLES_CUDA_BINARIES OR NOT WITH_CUDA_DYNLOAD)
+ 	find_package(CUDA) # Try to auto locate CUDA toolkit
+ 	if(CUDA_FOUND)
+ 		message(STATUS &quot;CUDA nvcc = ${CUDA_NVCC_EXECUTABLE}&quot;)
+<span class="hl kwa">+		</span>
+<span class="hl kwa">+		include(${CMAKE_SOURCE_DIR}/build_files/cmake/SelectCudaComputeArch.cmake)</span>
+<span class="hl kwa">+		CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_ARCH_FLAGS Auto)</span>
+<span class="hl kwa">+		set(CYCLES_CUDA_BINARIES_ARCH &quot;${CUDA_ARCH_FLAGS_readable}&quot;)</span>
+<span class="hl kwa">+	        message(STATUS &quot;Enabling CUDA support (version: ${CUDA_VERSION_STRING},&quot;</span>
+<span class="hl kwa">+                       &quot; archs: ${CUDA_ARCH_FLAGS_readable})&quot;)</span>
+<span class="hl kwa">+</span>
+ 	else()
+ 		message(STATUS &quot;CUDA compiler not found, disabling WITH_CYCLES_CUDA_BINARIES&quot;)
+ 		set(WITH_CYCLES_CUDA_BINARIES OFF)
+</code></pre></td></tr></table>
+</div> <!-- class=content -->
+<div id="footer">
+	<p>
+		Copyright &copy; 2004-2014 aurweb Development Team &ndash;
+		<strong>AUR packages are user produced content. Any use of the provided files is at your own risk.</strong>
+	</p>
+</div>
+</div> <!-- id=cgit -->
+</body>
+</html>

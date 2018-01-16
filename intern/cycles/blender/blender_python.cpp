@@ -778,6 +778,9 @@ static PyMethodDef methods[] = {
 	/* Compute Device selection */
 	{"get_device_types", get_device_types_func, METH_VARARGS, ""},
 
+	/* Compute Device selection */
+	{"get_device_types", get_device_types_func, METH_VARARGS, ""},
+
 	{NULL, NULL, 0, NULL},
 };
 

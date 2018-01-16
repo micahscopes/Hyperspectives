@@ -36,6 +36,15 @@ ccl_device void svm_node_set_bump(KernelGlobals *kg, ShaderData *sd, float *stac
 		object_inverse_dir_transform(kg, sd, &dPdy);
 	}
 
+	float3 dPdx = ccl_fetch(sd, dP).dx;
+	float3 dPdy = ccl_fetch(sd, dP).dy;
+
+	if(use_object_space) {
+		object_inverse_normal_transform(kg, sd, &normal_in);
+		object_inverse_dir_transform(kg, sd, &dPdx);
+		object_inverse_dir_transform(kg, sd, &dPdy);
+	}
+
 	/* get surface tangents from normal */
 	float3 Rx = cross(dPdy, normal_in);
 	float3 Ry = cross(normal_in, dPdx);

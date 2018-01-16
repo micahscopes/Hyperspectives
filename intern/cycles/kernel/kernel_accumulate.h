@@ -58,6 +58,9 @@ ccl_device_inline void bsdf_eval_init(BsdfEval *eval, ClosureType type, float3 v
 #ifdef __SHADOW_TRICKS__
 	eval->sum_no_mis = make_float3(0.0f, 0.0f, 0.0f);
 #endif
+	{
+		eval->diffuse = value;
+	}
 }
 
 ccl_device_inline void bsdf_eval_accum(BsdfEval *eval, ClosureType type, float3 value, float mis_weight)
@@ -368,6 +371,9 @@ ccl_device_inline void path_radiance_accum_total_ao(
 	(void) throughput;
 	(void) bsdf;
 #endif
+	{
+		L->emission += throughput*bsdf*ao;
+	}
 }
 
 ccl_device_inline void path_radiance_accum_light(PathRadiance *L,

@@ -183,7 +183,7 @@ public:
 		end_time = time_dt();
 	}
 
-	void reset_sample()
+	void set_total_pixel_samples(uint64_t total_pixel_samples_)
 	{
 		thread_scoped_lock lock(progress_mutex);
 

@@ -856,6 +856,20 @@ class DATA_PT_modifiers(ModifierButtonsPanel, Panel):
 
     def SMOKE(self, layout, ob, md):
         layout.label(text="Settings are inside the Physics tab")
+    def MOEBIUS(self, layout, ob, md):
+        split = layout.split()
+
+        col = split.column()
+        col.label(text="Control:")
+        col.prop(md, "control", text="")
+        col.label(text="Origin:")
+        col.prop(md, "origin", text="")
+
+
+        col = split.column()
+        col.label(text="Options:")
+#        col.prop(md, "localize", text="Localize Transformed Origin")
+        col.prop(md, "norm_power", text="Norm Power")
 
     def SMOOTH(self, layout, ob, md):
         split = layout.split(percentage=0.25)

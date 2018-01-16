@@ -950,6 +950,21 @@ enum {
 	MOD_SCREW_MERGE          = (1 << 8),
 };
 
+typedef struct MoebiusModifierData {
+	ModifierData modifier;
+	struct Object *control;
+	struct Object *origin;
+	float norm_power;
+	int flags;
+
+	char pad[8];
+} MoebiusModifierData;
+
+typedef enum MoebiusModifierFlags{
+	eMoebiusModifierFlag_localize = (1<<0)
+} MoebiusModifierFlags;
+
+
 typedef struct OceanModifierData {
 	ModifierData modifier;
 

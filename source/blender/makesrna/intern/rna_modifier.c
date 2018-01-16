@@ -108,6 +108,7 @@ const EnumPropertyItem rna_enum_object_modifier_type_items[] = {
 	{eModifierType_SurfaceDeform, "SURFACE_DEFORM", ICON_MOD_MESHDEFORM, "Surface Deform", ""},
 	{eModifierType_Warp, "WARP", ICON_MOD_WARP, "Warp", ""},
 	{eModifierType_Wave, "WAVE", ICON_MOD_WAVE, "Wave", ""},
+	{eModifierType_Moebius, "MOEBIUS", ICON_MOD_PHYSICS, "Moebius", ""},
 	{0, "", 0, N_("Simulate"), ""},
 	{eModifierType_Cloth, "CLOTH", ICON_MOD_CLOTH, "Cloth", ""},
 	{eModifierType_Collision, "COLLISION", ICON_MOD_PHYSICS, "Collision", ""},
@@ -365,6 +366,8 @@ static StructRNA *rna_Modifier_refine(struct PointerRNA *ptr)
 			return &RNA_MaskModifier;
 		case eModifierType_SimpleDeform:
 			return &RNA_SimpleDeformModifier;
+		case eModifierType_Moebius:
+			return &RNA_MoebiusModifier;
 		case eModifierType_Multires:
 			return &RNA_MultiresModifier;
 		case eModifierType_Surface:
@@ -2861,6 +2864,41 @@ static void rna_def_modifier_smoke(BlenderRNA *brna)
 	RNA_def_property_update(prop, 0, "rna_Smoke_set_type");
 }
 
+static void rna_def_modifier_moebius(BlenderRNA *brna)
+{
+	StructRNA *srna;
+	PropertyRNA *prop;
+
+	srna= RNA_def_struct(brna, "MoebiusModifier", "Modifier");
+	RNA_def_struct_ui_text(srna, "Moebius Modifier", "Moebius transformation");
+	RNA_def_struct_sdna(srna, "MoebiusModifierData");
+	RNA_def_struct_ui_icon(srna, ICON_MOD_PHYSICS);
+
+	prop = RNA_def_property(srna, "control", PROP_POINTER, PROP_NONE);
+	RNA_def_property_ui_text(prop, "Control Object", "Object whose quaternion defines the moebius transformation.");
+	RNA_def_property_flag(prop, PROP_EDITABLE | PROP_ID_SELF_CHECK);
+	RNA_def_property_update(prop, 0, "rna_Modifier_dependency_update");
+
+	prop = RNA_def_property(srna, "origin", PROP_POINTER, PROP_NONE);
+	RNA_def_property_ui_text(prop, "Origin Object", "Object that defines origin. If undefinied, uses control object position.");
+	RNA_def_property_flag(prop, PROP_EDITABLE | PROP_ID_SELF_CHECK);
+	RNA_def_property_update(prop, 0, "rna_Modifier_dependency_update");
+
+	prop = RNA_def_property(srna, "localize", PROP_BOOLEAN, PROP_NONE);
+	RNA_def_property_boolean_sdna(prop, NULL, "flags", eMoebiusModifierFlag_localize);
+	RNA_def_property_ui_text(prop, "Localize", "Subtract moebius transformed local origin from deformed coordinates.");
+	RNA_def_property_update(prop, 0, "rna_Modifier_update");
+
+	prop = RNA_def_property(srna, "norm_power", PROP_FLOAT, PROP_NONE);
+	RNA_def_property_float_sdna(prop, NULL, "norm_power");
+	RNA_def_property_range(prop, -100, 100);
+	RNA_def_property_ui_range(prop, -100, 100, 0.1, 2);
+	RNA_def_property_ui_text(prop, "Norm Power", "p value of the norm used (default is 2).");
+	RNA_def_property_update(prop, 0, "rna_Modifier_update");
+
+
+}
+
 static void rna_def_modifier_dynamic_paint(BlenderRNA *brna)
 {
 	StructRNA *srna;
@@ -2946,6 +2984,8 @@ static void rna_def_modifier_bevel(BlenderRNA *brna)
 	RNA_def_property_ui_range(prop, 0.0f, 100.0f, 0.1, 4);
 	RNA_def_property_ui_text(prop, "Width", "Bevel value/amount");
 	RNA_def_property_update(prop, 0, "rna_Modifier_update");
+
+
 
 	prop = RNA_def_property(srna, "segments", PROP_INT, PROP_NONE);
 	RNA_def_property_int_sdna(prop, NULL, "res");
@@ -4861,6 +4901,7 @@ void RNA_def_modifier(BlenderRNA *brna)
 	/* types */
 	rna_def_modifier_subsurf(brna);
 	rna_def_modifier_lattice(brna);
+	rna_def_modifier_moebius(brna);
 	rna_def_modifier_curve(brna);
 	rna_def_modifier_build(brna);
 	rna_def_modifier_mirror(brna);

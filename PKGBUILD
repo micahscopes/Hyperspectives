@@ -2,7 +2,7 @@
 
 
 pkgname=hyperblender2.8
-pkgver=2.8_r71697.18965905d0f
+pkgver=2.8_r72306.0d0ca6219f
 pkgrel=1
 pkgdesc="Development version of Blender 2.8 branch with Moebius modifier"
 arch=('i686' 'x86_64')
@@ -34,8 +34,8 @@ md5sums=('SKIP'
          'SKIP'
          'SKIP'
          'SKIP'
-         'cd108dca1c77607c6a7cc45aa284ea97'
-         'd1ee53ea71d0617c28caba2774eaf3e0'
+         'SKIP'
+         'SKIP'
          '449373d2fdf2af6b357101fc10e3d573')
 
 # determine whether we can precompile CUDA kernels

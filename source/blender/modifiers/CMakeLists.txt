@@ -75,6 +75,7 @@ set(SRC
 	intern/MOD_meshdeform.c
 	intern/MOD_meshsequencecache.c
 	intern/MOD_mirror.c
+	intern/MOD_moebius.c
 	intern/MOD_multires.c
 	intern/MOD_none.c
 	intern/MOD_normal_edit.c

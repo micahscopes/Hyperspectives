@@ -150,7 +150,7 @@
 								'Wikipedia: <a href="http://wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a>, <a href="http://wikipedia.org/wiki/Mobius_group">Möbius transformation</a>, <a href="http://en.wikipedia.org/wiki/Rotations_in_4-dimensional_Euclidean_space#Isoclinic_decomposition">Isoclinic decomposition.</a>' +
 								'<p/>Credits: Built in <a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a>. ' +
 								'Horse model by <a href="http://mirada.com/">mirada</a> (as seen in <a href="http://ro.me">rome</a>). Hypertext,' +
-								' composition & shaders by <a href="http://soundcloud.com/micahphones">micahphones</a>. ' +'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>';
+								' composition & shaders by <a href="https://github.com/micahscopes">@micahscopes</a>. ' +'<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>';
 
 				container.appendChild( infoTop );
 				container.appendChild( refs );
@@ -158,7 +158,7 @@
 				//
 
 				scene = new THREE.Scene();
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 100000 );
+				camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 100000 );
 				scene.add( camera );
 
 				camera.target = new THREE.Vector3( 0, 150, 3000 );
@@ -222,7 +222,7 @@
 
 				//
 
-				renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.WebGLRenderer({antialias: true);
 				renderer.sortObjects = false;
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -237,26 +237,30 @@
 
 				document.addEventListener( 'keyup', onKeypress, false );
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.addEventListener( 'touchstart', onDocumentMouseDown, false );
 			}
 
-						function onDocumentMouseDown( event ) {
-
-				//event.preventDefault();
-
+			function onDocumentMouseDown( event ) {
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'touchmove', onDocumentMouseMove, false );
 				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 				document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+				document.addEventListener( 'touchup', onDocumentMouseOut, false );
+				document.addEventListener( 'touchcancel', onDocumentMouseOut, false );
 
-				mouseXOnMouseDown = event.clientX - windowHalfX;
-				mouseYOnMouseDown = event.clientY - windowHalfY;
+				var clientX = event.touches ? event.touches[0].clientX : event.clientX;
+				var clientY = event.touches ? event.touches[0].clientY : event.clientY;
+				mouseXOnMouseDown = clientX - windowHalfX;
+				mouseYOnMouseDown = clientY - windowHalfY;
 				targetYRotationOnMouseDown = targetYRotation;
 				targetXRotationOnMouseDown = targetXRotation;
 			}
 
 			function onDocumentMouseMove( event ) {
-
-				mouseX = event.clientX - windowHalfX;
-				mouseY = event.clientY - windowHalfY;
+				var clientX = event.touches ? event.touches[0].clientX : event.clientX;
+				var clientY = event.touches ? event.touches[0].clientY : event.clientY;
+				mouseX = clientX - windowHalfX;
+				mouseY = clientY - windowHalfY;
 
 				targetYRotation = targetYRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
 				targetXRotation = Math.max(-4,Math.min(4,targetXRotationOnMouseDown + ( mouseY - mouseYOnMouseDown ) * 0.02));
@@ -264,14 +268,12 @@
 			}
 
 			function onDocumentMouseUp( event ) {
-
 				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 				document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 			}
 
 			function onDocumentMouseOut( event ) {
-
 				document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
 				document.removeEventListener( 'mouseout', onDocumentMouseOut, false );

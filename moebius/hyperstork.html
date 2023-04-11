@@ -174,6 +174,7 @@
 
 			scene = new THREE.Scene();
 			camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 300, 100000);
+			window.camera = camera;
 			scene.add(camera);
 
 			camera.target = new THREE.Vector3(0, 150, 3000);

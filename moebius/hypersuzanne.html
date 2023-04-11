@@ -56,7 +56,7 @@
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
 		<script type="x-shader/x-fragment" id="fragmentshader"></script>
 				
-		<script src="../js/three.js/build/three.js"></script>
+		<script src="../js/three.js/three.min.js"></script>
 		<script src="../js/three.js/examples/js/loaders/OBJLoader.js"></script>
 		<script src="../js/three.js/examples/js/loaders/DDSLoader.js"></script>
 		<script src="../js/three.js/examples/js/modifiers/SubdivisionModifier.js"></script>
@@ -140,12 +140,14 @@
 				document.body.appendChild( container );
 
 				var infoTop = document.createElement( 'div' );
+				infoTop.classList.add('info')
 				infoTop.style.padding = "0 100px";
 				infoTop.style.textAlign = 'center';
 				
 				infoTop.innerHTML = '<h4>The cube undergoes a Moebius transformation.  <br/>Dragging moves the camera. The left & right arrow keys decrement and increment rotation speed. Spacebar to pause.</h4>';
 				
 				var refs = document.createElement( 'div' );
+				refs.classList.add('info')
 				refs.style.position = 'absolute';
 				refs.style.bottom = '10px';
 				refs.style.width = '98%';

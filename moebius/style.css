@@ -1,0 +1,9 @@
+body.simple .info {
+  display: none;
+}
+
+.info {
+  position: absolute;
+  width: 100%;
+  z-index: 5;
+}

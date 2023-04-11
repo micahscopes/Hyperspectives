@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const hash = window.location.hash
-  if (hash && hash=='simple') {
-    document.html.classList.add('simple')
+  console.log('hash', hash)
+  if (hash && hash=='#simple') {
+    document.body.classList.add('simple')
   }
 })

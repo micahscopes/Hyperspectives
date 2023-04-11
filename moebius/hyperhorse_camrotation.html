@@ -38,6 +38,7 @@
 				color: #aaa;
 			}
 		</style>
+		</style>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -49,17 +50,20 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>
-	</head>
+
+	<script src="./common.js"></script>
+	<link rel="stylesheet" href="./style.css">
+</head>
 	<body>		
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
 		<script type="x-shader/x-fragment" id="fragmentshader"></script>
 		
-		<script src="../js/three.js/three.min.js"></script>
-		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-		<script src="../js/three.js/examples/js/Stats.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.js" integrity="sha512-Mg8CRr3s8m/1U8oSZhf8cZf6kuHotFOmIMs3QAogcTow4qcR1tusWgGEZeZS1yCYI5GirqpcVCZDDBxonxq6wA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>		<script src="../js/three.js/examples/js/loaders/DDSLoader.js"></script>
+
+		<script src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="../js/jquery-1.4.3.min.js"></script>
+		<!-- <script src="../js/three.js/build/three.min.js"></script> -->
 		<script>
 		/*global $ */
 		$(function () {
@@ -231,8 +235,9 @@
 				//
 
 				renderer = new THREE.WebGLRenderer({antialias: true});
+				window.renderer = renderer;
 				renderer.sortObjects = false;
-				renderer.setSize( window.innerWidth, window.innerHeight-75 );
+				renderer.setSize( window.innerWidth, window.innerHeight );
 
 				container.appendChild(renderer.domElement);
 

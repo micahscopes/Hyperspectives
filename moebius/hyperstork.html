@@ -51,13 +51,16 @@
   })();
 
 </script>
+	<script src="./common.js"></script>
+	<link rel="stylesheet" href="./style.css">
 	</head>
 	<body>		
 		<script type="x-shader/x-vertex" id="vertexshader"></script>
 		<script type="x-shader/x-fragment" id="fragmentshader"></script>
 		
-		<script src="../js/three.js/three.min.js"></script>
-		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<!-- <script src="../js/three.js/build/three.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/68/three.min.js" integrity="sha512-JiYwlzLlG/SQksHtzv/6vot6Bqw7Hx0GRD+8qsyCvAP+R+GouKbhjuovIVqNDc8743jhBUa8qBkpv//iisuq+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 		<script src="../js/jquery-1.4.3.min.js"></script>
 		<script>
 		/*global $ */
@@ -231,8 +234,9 @@
 				//
 
 				renderer = new THREE.WebGLRenderer({antialias: true});
+				window.renderer = renderer;
 				renderer.sortObjects = false;
-				renderer.setSize( window.innerWidth, window.innerHeight-75 );
+				renderer.setSize( window.innerWidth, window.innerHeight );
 
 				container.appendChild(renderer.domElement);
 

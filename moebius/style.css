@@ -7,3 +7,7 @@ body.simple .info {
   width: 100%;
   z-index: 5;
 }
+
+.translucent-background {
+  background-color: rgba(0,0,0,0);
+}

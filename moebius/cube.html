@@ -252,6 +252,11 @@
 			document.addEventListener('keyup', onKeypress, false);
 			document.addEventListener('mousedown', onDocumentMouseDown, false);
 			document.addEventListener('touchstart', onDocumentMouseDown, false);
+			document.addEventListener('pointerup', () => {
+				if (isMobile() && !document.fullscreen) {
+					document.documentElement.requestFullscreen();
+				}
+			})
 		}
 
 		function onDocumentMouseDown(event) {
@@ -261,10 +266,6 @@
 			document.addEventListener('mouseout', onDocumentMouseOut, false);
 			document.addEventListener('touchup', onDocumentMouseOut, false);
 			document.addEventListener('touchcancel', onDocumentMouseOut, false);
-
-			if (isMobile() && !document.fullscreen) {
-				document.documentElement.requestFullscreen();
-			}
 
 			var clientX = event.touches ? event.touches[0].clientX : event.clientX;
 			var clientY = event.touches ? event.touches[0].clientY : event.clientY;

@@ -293,7 +293,7 @@
 			mouseX = clientX - windowHalfX;
 			mouseY = clientY - windowHalfY;
 
-			targetYRotation = targetYRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
+			targetYRotation = targetYRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.01;
 			targetXRotation = Math.max(-4, Math.min(4, targetXRotationOnMouseDown + (mouseY - mouseYOnMouseDown) * 0.02));
 
 		}
@@ -357,7 +357,7 @@
 
 			camera.position.x = radius * Math.cos(targetYRotation);
 			camera.position.z = radius * Math.sin(targetYRotation);
-			camera.position.y = radius * (Math.pow(Math.E, targetXRotation) - Math.pow(Math.E, -targetXRotation)) / 2
+			camera.position.y = radius/10 * (Math.pow(Math.E, targetXRotation) - Math.pow(Math.E, -targetXRotation)) / 2
 			if (mesh) {
 				camera.lookAt(mesh.position.clone().add(new THREE.Vector3(0, 80, 0)));
 				if (camera.position.distanceTo(mesh.position) > 1800) {

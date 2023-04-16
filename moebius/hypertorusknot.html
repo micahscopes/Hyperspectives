@@ -359,7 +359,7 @@
 
 			camera.position.x = radius * Math.cos(targetYRotation);
 			camera.position.z = radius * Math.sin(targetYRotation);
-			camera.position.y = radius * (Math.pow(Math.E, targetXRotation) - Math.pow(Math.E, -targetXRotation)) / 2
+			camera.position.y = radius/10 * (Math.pow(Math.E, targetXRotation) - Math.pow(Math.E, -targetXRotation)) / 2
 			if (referenceObject) {
 				camera.lookAt(referenceObject.position.clone().add(new THREE.Vector3(0, 80, 0)));
 			}
